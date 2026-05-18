@@ -177,6 +177,7 @@
         .logo-icon {
             width: 40px;
             height: 40px;
+            object-fit: cover;
             border-radius: 50%;
             border: 2px solid var(--accent-red);
             box-shadow: 0 0 15px rgba(255, 0, 51, 0.5);
@@ -297,12 +298,14 @@
             max-width: 500px;
             filter: drop-shadow(0 0 50px rgba(107, 15, 159, 0.5));
             animation: float 6s ease-in-out infinite;
+            background: transparent;
         }
 
         .millie-image {
             width: 100%;
             height: auto;
             transition: all 0.3s;
+            background: transparent;
         }
 
         .millie-container:hover .millie-image {
@@ -854,8 +857,8 @@
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; margin-top: 4rem;">
             <div style="position: sticky; top: 120px;">
-                <div class="millie-container" style="max-width: 300px; margin: 0 auto;">
-                    <img src="./icon.png" alt="ミリーちゃんアイコン" class="millie-image" style="border-radius: 50%; border: 3px solid var(--accent-red); box-shadow: 0 0 40px rgba(255, 0, 51, 0.6);">
+                <div style="max-width: 300px; margin: 0 auto; position: relative; animation: float 6s ease-in-out infinite;">
+                    <img src="./icon.png" alt="ミリーちゃんアイコン" style="width: 300px; height: 300px; object-fit: cover; border-radius: 50%; border: 3px solid var(--accent-red); box-shadow: 0 0 40px rgba(255, 0, 51, 0.6); transition: all 0.3s;">
                 </div>
             </div>
             
@@ -924,7 +927,7 @@
     <!-- Footer -->
     <footer>
         <div style="display: flex; align-items: center; justify-content: center; gap: 1rem; margin-bottom: 1.5rem;">
-            <img src="./icon.png" alt="ミリーちゃん" style="width: 60px; height: 60px; border-radius: 50%; border: 2px solid var(--accent-red); box-shadow: 0 0 20px rgba(255, 0, 51, 0.5); animation: pulse 2s infinite;">
+            <img src="./icon.png" alt="ミリーちゃん" style="width: 60px; height: 60px; object-fit: cover; border-radius: 50%; border: 2px solid var(--accent-red); box-shadow: 0 0 20px rgba(255, 0, 51, 0.5); animation: pulse 2s infinite;">
             <div style="font-size: 2rem;">ミリーちゃん</div>
         </div>
         <p style="color: #888; font-size: 1rem;">Interactive Horror × LINE Bot Project</p>
