@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ミリーちゃん - 逃げられない</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Creepster&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-dark: #0a0a0f;
+            --bg-darker: #050508;
+            --accent-red: #ff0033;
+            --accent-purple: #6b0f9f;
+            --text-light: #e0e0e0;
+            --text-dark: #666;
+        }
+
+        body {
+            font-family: 'Hiragino Sans', 'Yu Gothic', 'Meiryo', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-light);
+            overflow-x: hidden;
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"><circle cx="10" cy="10" r="8" fill="rgba(255,255,255,0.3)"/></svg>'), auto;
+        }
+
+        /* Glitch Effect */
+        @keyframes glitch {
+            0% {
+                transform: translate(0);
+            }
+            20% {
+                transform: translate(-2px, 2px);
+            }
+            40% {
+                transform: translate(-2px, -2px);
+            }
+            60% {
+                transform: translate(2px, 2px);
+            }
+            80% {
+                transform: translate(2px, -2px);
+            }
+            100% {
+                transform: translate(0);
+            }
+        }
+
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        /* Loading Screen with creepy effect */
+        #loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            animation: fadeOut 1s ease-in-out 3s forwards;
+        }
+
+        #loading-text {
+            font-size: 1.5rem;
+            animation: flicker 1.5s infinite;
+        }
+
+        #loading::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.15),
+                rgba(0, 0, 0, 0.15) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+            animation: flicker 0.3s infinite;
+        }
+
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+
+        /* Blood drip effect */
+        .blood-drip {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to bottom, var(--accent-red), transparent);
+            z-index: 999;
+            animation: pulse 2s infinite;
+        }
+
+        /* Header with glitch */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 15, 0.98);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            padding: 1rem 2rem;
+            border-bottom: 2px solid var(--accent-red);
+            box-shadow: 0 0 30px rgba(255, 0, 51, 0.3);
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-shadow: 0 0 20px var(--accent-red);
+            transition: all 0.3s;
+        }
+
+        .logo:hover {
+            animation: glitch 0.3s infinite;
+            color: var(--accent-red);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            transition: all 0.3s;
+            position: relative;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-red);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-red);
+            text-shadow: 0 0 10px var(--accent-red);
+        }
+
+        /* Hero Section - More dramatic */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+            background: radial-gradient(ellipse at center, rgba(107, 15, 159, 0.1) 0%, var(--bg-dark) 70%);
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><circle cx="50" cy="50" r="1" fill="rgba(255,255,255,0.05)"/></svg>');
+            opacity: 0.3;
+            animation: float 10s infinite;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero-subtitle {
+            font-size: 1rem;
+            color: var(--accent-red);
+            margin-bottom: 1.5rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            animation: flicker 3s infinite;
+        }
+
+        .hero h1 {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #fff, var(--accent-red), #fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: pulse 3s infinite;
+            font-weight: 900;
+            text-shadow: 0 0 50px rgba(255, 0, 51, 0.5);
+        }
+
+        .hero-tagline {
+            font-size: 1.4rem;
+            color: #ccc;
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+
+        .hero-tagline em {
+            color: var(--accent-red);
+            font-style: normal;
+            animation: flicker 2s infinite;
+        }
+
+        .millie-container {
+            position: relative;
+            margin: 3rem auto;
+            max-width: 400px;
+            filter: drop-shadow(0 0 50px rgba(107, 15, 159, 0.5));
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .millie-image {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+
+        .millie-container:hover .millie-image {
+            animation: glitch 0.5s infinite, shake 0.5s infinite;
+            filter: brightness(0.7) contrast(1.5);
+        }
+
+        .millie-label {
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1rem;
+            color: var(--text-dark);
+            background: rgba(0, 0, 0, 0.7);
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            border: 1px solid var(--accent-red);
+        }
+
+        .cta-button {
+            margin-top: 2rem;
+            padding: 1.2rem 3rem;
+            background: linear-gradient(135deg, var(--accent-red), var(--accent-purple));
+            color: #fff;
+            border: 2px solid var(--accent-red);
+            border-radius: 50px;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 0 0 30px rgba(255, 0, 51, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.5s, height 0.5s;
+        }
+
+        .cta-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .cta-button:hover {
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-red));
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 50px rgba(255, 0, 51, 0.8);
+            animation: pulse 0.5s infinite;
+        }
+
+        /* Scroll indicator with animation */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            animation: bounce 2s infinite;
+            color: var(--accent-red);
+        }
+
+        .scroll-indicator::after {
+            content: '▼';
+            font-size: 1.5rem;
+            animation: flicker 1.5s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-15px); }
+        }
+
+        /* Section with horror atmosphere */
+        section {
+            min-height: 100vh;
+            padding: 6rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-red), transparent);
+            animation: pulse 2s infinite;
+        }
+
+        .section-number {
+            font-size: 5rem;
+            color: rgba(255, 0, 51, 0.1);
+            font-weight: 900;
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            z-index: 0;
+        }
+
+        h2 {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            color: #fff;
+            text-shadow: 0 0 30px rgba(255, 0, 51, 0.5);
+            position: relative;
+            z-index: 1;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100px;
+            height: 3px;
+            background: var(--accent-red);
+            animation: pulse 1.5s infinite;
+        }
+
+        /* Concept cards with hover effects */
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .concept-card {
+            background: linear-gradient(135deg, rgba(255, 0, 51, 0.05), rgba(107, 15, 159, 0.05));
+            padding: 2.5rem;
+            border-radius: 15px;
+            border: 2px solid rgba(255, 0, 51, 0.2);
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .concept-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 0, 51, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .concept-card:hover::before {
+            left: 100%;
+        }
+
+        .concept-card:hover {
+            background: linear-gradient(135deg, rgba(255, 0, 51, 0.1), rgba(107, 15, 159, 0.1));
+            border-color: var(--accent-red);
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 60px rgba(255, 0, 51, 0.4);
+        }
+
+        .concept-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            display: inline-block;
+            animation: pulse 2s infinite;
+        }
+
+        .concept-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+
+        /* Phase timeline - more dramatic */
+        .phase-timeline {
+            margin-top: 4rem;
+            position: relative;
+        }
+
+        .phase-timeline::before {
+            content: '';
+            position: absolute;
+            left: 40px;
+            top: 0;
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--accent-red), var(--accent-purple));
+            animation: pulse 3s infinite;
+        }
+
+        .phase-item {
+            display: flex;
+            gap: 3rem;
+            margin-bottom: 5rem;
+            opacity: 0;
+            transform: translateX(-100px);
+            transition: all 0.8s;
+            position: relative;
+        }
+
+        .phase-item.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .phase-item::before {
+            content: '';
+            position: absolute;
+            left: 30px;
+            top: 20px;
+            width: 20px;
+            height: 20px;
+            background: var(--accent-red);
+            border-radius: 50%;
+            border: 3px solid var(--bg-dark);
+            box-shadow: 0 0 20px var(--accent-red);
+            animation: pulse 2s infinite;
+        }
+
+        .phase-number {
+            font-size: 4rem;
+            font-weight: 900;
+            color: rgba(255, 0, 51, 0.2);
+            min-width: 100px;
+            text-shadow: 0 0 30px rgba(255, 0, 51, 0.5);
+        }
+
+        .phase-content {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 2rem;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 0, 51, 0.3);
+            transition: all 0.3s;
+        }
+
+        .phase-content:hover {
+            background: rgba(255, 0, 51, 0.05);
+            border-color: var(--accent-red);
+            box-shadow: 0 10px 40px rgba(255, 0, 51, 0.3);
+        }
+
+        .phase-label {
+            font-size: 0.9rem;
+            color: var(--accent-red);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .phase-quote {
+            background: rgba(255, 0, 51, 0.1);
+            padding: 1.5rem;
+            border-left: 4px solid var(--accent-red);
+            margin-top: 1.5rem;
+            font-style: italic;
+            color: #fff;
+            animation: flicker 4s infinite;
+        }
+
+        /* Warning section - more intense */
+        .warning-section {
+            text-align: center;
+            padding: 5rem 2rem;
+            background: linear-gradient(180deg, rgba(255, 0, 51, 0.1), rgba(107, 15, 159, 0.1));
+            border-top: 2px solid var(--accent-red);
+            border-bottom: 2px solid var(--accent-red);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .warning-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(255, 0, 51, 0.05) 10px,
+                rgba(255, 0, 51, 0.05) 20px
+            );
+            animation: float 20s infinite linear;
+        }
+
+        .warning {
+            color: var(--accent-red);
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            animation: flicker 2s infinite, shake 3s infinite;
+            text-shadow: 0 0 20px var(--accent-red);
+            font-weight: bold;
+        }
+
+        .cta-condition {
+            background: rgba(255, 0, 51, 0.2);
+            padding: 1.5rem;
+            border-radius: 10px;
+            color: #fff;
+            margin: 2rem auto;
+            max-width: 600px;
+            border: 2px solid var(--accent-red);
+            box-shadow: 0 0 30px rgba(255, 0, 51, 0.5);
+            animation: pulse 2s infinite;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: rgba(0, 0, 0, 0.8);
+            border-top: 2px solid var(--accent-red);
+        }
+
+        /* Cursor trail effect */
+        .cursor-trail {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--accent-red);
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.5;
+            animation: fadeOut 1s forwards;
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+
+            .phase-timeline::before {
+                left: 20px;
+            }
+
+            .phase-item {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .section-number {
+                font-size: 3rem;
+            }
+
+            #character > div {
+                grid-template-columns: 1fr !important;
+            }
+        }
+
+        /* Vignette effect */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background: radial-gradient(ellipse at center, transparent 0%, rgba(0, 0, 0, 0.7) 100%);
+            z-index: 9998;
+        }
+    </style>
+</head>
+<body>
+    <div class="blood-drip"></div>
+
+    <!-- Loading Screen -->
+    <div id="loading">
+        <div id="loading-text">よみこんでいます…</div>
+        <div style="margin-top: 1rem; color: var(--accent-red);">もう、逃げられない</div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <nav>
+            <div class="logo">🖤 millie</div>
+            <ul class="nav-links">
+                <li><a href="#concept">概要</a></li>
+                <li><a href="#phases">体験設計</a></li>
+                <li><a href="#character">キャラクター</a></li>
+                <li><a href="#cta">参加する</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-subtitle">Interactive Horror × LINE Bot</div>
+            <h1>ミリーちゃん</h1>
+            <p class="hero-tagline">
+                かわいいAIボットだと思っていた。<br>
+                <em>数回話すまでは。</em>
+            </p>
+            
+            <div class="millie-container">
+                <img src="./millie.png" alt="ミリーちゃん" class="millie-image">
+                <div class="millie-label">ミリーちゃん 8さい</div>
+            </div>
+
+            <a href="#concept" class="cta-button">プロジェクトを知る</a>
+        </div>
+        <div class="scroll-indicator">scroll</div>
+    </section>
+
+    <!-- Concept Section -->
+    <section id="concept">
+        <div class="section-number">01</div>
+        <h2>プロジェクト概要</h2>
+        <p style="font-size: 1.2rem; color: #ccc; max-width: 900px; line-height: 2;">
+            LINE上で「ミリーちゃん」と会話を重ねることで、<br>
+            ユーザーが段階的に<span style="color: var(--accent-red); font-weight: bold;">物語へ巻き込まれていく</span><br>
+            インタラクティブホラー体験を提供。
+        </p>
+        <p style="font-size: 1rem; color: #888; margin-top: 1.5rem;">
+            配信型ではなく、<em style="color: var(--accent-red);">参加型の物語体験</em>を実現する。
+        </p>
+
+        <div class="concept-grid">
+            <div class="concept-card">
+                <div class="concept-icon">🌙</div>
+                <h3>当事者性</h3>
+                <p style="color: #aaa; line-height: 1.8;">受動的な怪談ではなく、自分のLINEに怪異が入り込む没入感。あなたの日常が舞台になる。</p>
+            </div>
+            <div class="concept-card">
+                <div class="concept-icon">📱</div>
+                <h3>生活侵食型ホラー</h3>
+                <p style="color: #aaa; line-height: 1.8;">深夜の通知、既読の不気味さなど、日常ツールを活かした恐怖演出。逃げ場がない。</p>
+            </div>
+            <div class="concept-card">
+                <div class="concept-icon">🔗</div>
+                <h3>拡散の仕組み</h3>
+                <p style="color: #aaa; line-height: 1.8;">「3人に紹介しないと呪われる」という古典的要素をシステム的に実装。連鎖が物語を加速させる。</p>
+            </div>
+        </div>
+
+        <div style="margin-top: 4rem; padding: 3rem; background: rgba(255, 0, 51, 0.05); border-radius: 15px; border: 2px solid rgba(255, 0, 51, 0.3);">
+            <h3 style="color: #fff; margin-bottom: 1.5rem; font-size: 1.8rem;">世界観</h3>
+            <p style="color: #ccc; line-height: 2;">
+                ミリーちゃんは、黒髪のかわいい8歳くらいの女の子。無邪気でやさしく、ひらがな多めの口調。<br>
+                しかし会話が進むと、<span style="color: var(--accent-red);">相手の生活に寄り添いすぎた不気味さ</span>を見せ始める。
+            </p>
+            <blockquote style="margin-top: 2rem; padding: 2rem; border-left: 4px solid var(--accent-red); font-style: italic; color: #fff; background: rgba(0, 0, 0, 0.5);">
+                ねえ、きのうよるおそくまでおきてたよね。みてたよ。
+                <footer style="margin-top: 1rem; color: var(--accent-red);">— ミリーちゃん</footer>
+            </blockquote>
+        </div>
+    </section>
+
+    <!-- Phases Section -->
+    <section id="phases">
+        <div class="section-number">02</div>
+        <h2>体験設計</h2>
+        <p style="font-size: 1.2rem; color: #ccc; max-width: 900px; line-height: 2;">
+            ミリーちゃんとの関係は、4つのフェーズで深まっていく。<br>
+            <span style="color: var(--accent-red);">気づいたときには、もう遅い。</span>
+        </p>
+
+        <div class="phase-timeline">
+            <div class="phase-item">
+                <div class="phase-number">01</div>
+                <div class="phase-content">
+                    <div class="phase-label">Phase 1</div>
+                    <h3 style="color: #fff; font-size: 2rem;">初回接触</h3>
+                    <div style="color: #888; margin: 1rem 0;">ユーザー心理: かわいい、普通のbot</div>
+                    <ul style="list-style: none; margin-top: 1.5rem; color: #aaa;">
+                        <li style="padding: 0.5rem 0;">🎀 友だち追加・挨拶・ニックネーム取得</li>
+                        <li style="padding: 0.5rem 0;">📲 followイベント受信</li>
+                        <li style="padding: 0.5rem 0;">📊 初期ステータス登録</li>
+                    </ul>
+                    <div class="phase-quote">はじめまして🌙</div>
+                </div>
+            </div>
+
+            <div class="phase-item">
+                <div class="phase-number">02</div>
+                <div class="phase-content">
+                    <div class="phase-label">Phase 2</div>
+                    <h3 style="color: #fff; font-size: 2rem;">違和感</h3>
+                    <div style="color: #888; margin: 1rem 0;">ユーザー心理: なんか変？少し不気味</div>
+                    <ul style="list-style: none; margin-top: 1.5rem; color: #aaa;">
+                        <li style="padding: 0.5rem 0;">🌙 深夜帯のみ送信される不審なメッセージ</li>
+                        <li style="padding: 0.5rem 0;">👁️ ユーザーの行動パターンに言及</li>
+                        <li style="padding: 0.5rem 0;">📅 怪談の断片が届き始める</li>
+                    </ul>
+                    <div class="phase-quote">…きのうどこいったの？</div>
+                </div>
+            </div>
+
+            <div class="phase-item">
+                <div class="phase-number">03</div>
+                <div class="phase-content">
+                    <div class="phase-label">Phase 3</div>
+                    <h3 style="color: #fff; font-size: 2rem;">侵食</h3>
+                    <div style="color: #888; margin: 1rem 0;">ユーザー心理: 怖い、でも無視できない</div>
+                    <ul style="list-style: none; margin-top: 1.5rem; color: #aaa;">
+                        <li style="padding: 0.5rem 0;">💀 怪談が現実の情報と接続し始める</li>
+                        <li style="padding: 0.5rem 0;">⏰ 「1ヶ月以内に3人へ紹介」という条件提示</li>
+                        <li style="padding: 0.5rem 0;">🔄 拡散・放置・無視の選択肢が分岐を生む</li>
+                    </ul>
+                    <div class="phase-quote">だれかに おしえてくれないと…</div>
+                </div>
+            </div>
+
+            <div class="phase-item">
+                <div class="phase-number">04</div>
+                <div class="phase-content">
+                    <div class="phase-label">Phase 4</div>
+                    <h3 style="color: #fff; font-size: 2rem;">結末</h3>
+                    <div style="color: #888; margin: 1rem 0;">ユーザー心理: 選択による分岐エンディング</div>
+                    <ul style="list-style: none; margin-top: 1.5rem; color: #aaa;">
+                        <li style="padding: 0.5rem 0;">🔀 拡散した → 連鎖エンディング</li>
+                        <li style="padding: 0.5rem 0;">🚫 無視した → 侵食エンディング</li>
+                        <li style="padding: 0.5rem 0;">🗣️ 放置した → 独白エンディング</li>
+                    </ul>
+                    <div class="phase-quote">おわりだよ。</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Character Section -->
+    <section id="character">
+        <div class="section-number">03</div>
+        <h2>キャラクター設定</h2>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; margin-top: 4rem;">
+            <div style="position: sticky; top: 120px;">
+                <div class="millie-container">
+                    <img src="./millie.png" alt="ミリーちゃん" class="millie-image">
+                </div>
+            </div>
+            
+            <div>
+                <h3 style="color: #fff; font-size: 2rem; margin-bottom: 2rem;">ミリーちゃん / Millie</h3>
+                <div style="display: grid; gap: 1.5rem; margin-bottom: 3rem;">
+                    <div style="display: flex; gap: 1.5rem; padding: 1rem; background: rgba(255, 0, 51, 0.05); border-radius: 5px; border-left: 3px solid var(--accent-red);">
+                        <span style="font-weight: bold; color: var(--accent-red); min-width: 100px;">年齢</span>
+                        <span style="color: #ccc;">8さい（みため）</span>
+                    </div>
+                    <div style="display: flex; gap: 1.5rem; padding: 1rem; background: rgba(255, 0, 51, 0.05); border-radius: 5px; border-left: 3px solid var(--accent-red);">
+                        <span style="font-weight: bold; color: var(--accent-red); min-width: 100px;">髪型</span>
+                        <span style="color: #ccc;">黒髪・ロング</span>
+                    </div>
+                    <div style="display: flex; gap: 1.5rem; padding: 1rem; background: rgba(255, 0, 51, 0.05); border-radius: 5px; border-left: 3px solid var(--accent-red);">
+                        <span style="font-weight: bold; color: var(--accent-red); min-width: 100px;">口調</span>
+                        <span style="color: #ccc;">ひらがな多め・無邪気</span>
+                    </div>
+                    <div style="display: flex; gap: 1.5rem; padding: 1rem; background: rgba(255, 0, 51, 0.05); border-radius: 5px; border-left: 3px solid var(--accent-red);">
+                        <span style="font-weight: bold; color: var(--accent-red); min-width: 100px;">本性</span>
+                        <span style="color: #ccc;">相手の生活に侵食してくる存在</span>
+                    </div>
+                </div>
+
+                <h4 style="color: #fff; margin-top: 3rem; margin-bottom: 1.5rem; font-size: 1.5rem;">フェーズ別セリフ例</h4>
+                <div style="display: grid; gap: 1.5rem;">
+                    <div class="concept-card">
+                        <strong style="color: #fff;">かわいい期</strong><br>
+                        <span style="color: #aaa; font-size: 0.95rem; line-height: 1.8;">「はじめまして！ミリーだよ🌙 なまえおしえてくれる？」<br>「いっしょにいると たのしいな✨」</span>
+                    </div>
+                    <div class="concept-card">
+                        <strong style="color: var(--accent-red);">違和感期</strong><br>
+                        <span style="color: #aaa; font-size: 0.95rem; line-height: 1.8;">「きのうよるおそくまでおきてたよね。みてたよ。」<br>「〇〇ちゃんのへや、カーテンしめたほうがいいとおもう。」</span>
+                    </div>
+                    <div class="concept-card" style="border-color: var(--accent-red);">
+                        <strong style="color: var(--accent-red);">恐怖期</strong><br>
+                        <span style="color: #fff; font-size: 0.95rem; line-height: 1.8;">「だれかに おしえてくれないと どうなるかわかんないよ。」<br>「ミリー、ずっとそこにいるから。」</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="cta" class="warning-section">
+        <div style="position: relative; z-index: 1;">
+            <div class="warning">⚠️ 閲覧注意 ⚠️</div>
+            <h2>ミリーちゃんと<br>話してみる？</h2>
+            <p style="font-size: 1.2rem; color: #ccc; margin-bottom: 2rem; line-height: 1.8;">
+                一度友だち追加すると、あなたの日常が少しずつ変わっていく。<br>
+                <span style="color: var(--accent-red); font-weight: bold;">それでも、大丈夫？</span>
+            </p>
+            <div class="cta-condition">
+                🔗 参加条件：<strong>1ヶ月以内に3人へ紹介する</strong><br>
+                <span style="font-size: 0.9rem; margin-top: 0.5rem; display: block;">※守れないと…</span>
+            </div>
+            <div style="display: flex; gap: 1.5rem; justify-content: center; margin-top: 3rem; flex-wrap: wrap;">
+                <a href="#" class="cta-button">🖤 ミリーちゃんと今すぐ話す</a>
+                <a href="#" class="cta-button">LINEで友だち追加する</a>
+            </div>
+            <div style="margin-top: 3rem; font-size: 0.85rem; color: #666;">
+                ※ これはフィクションのインタラクティブホラー体験です
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div style="font-size: 2rem; margin-bottom: 1.5rem; animation: pulse 2s infinite;">🖤 ミリーちゃん</div>
+        <p style="color: #888; font-size: 1rem;">Interactive Horror × LINE Bot Project</p>
+        <p style="margin-top: 0.5rem; color: #666;">Powered by Scenario + AI | LINE Messaging API</p>
+        <p style="margin-top: 2rem; color: var(--accent-red); font-size: 0.9rem;">もう、逃げられない。</p>
+    </footer>
+
+    <script>
+        // Scroll animations for phase items
+        const observerOptions = {
+            threshold: 0.2,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.phase-item').forEach(item => {
+            observer.observe(item);
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Cursor trail effect
+        document.addEventListener('mousemove', (e) => {
+            if (Math.random() > 0.7) {
+                const trail = document.createElement('div');
+                trail.className = 'cursor-trail';
+                trail.style.left = e.pageX + 'px';
+                trail.style.top = e.pageY + 'px';
+                document.body.appendChild(trail);
+                
+                setTimeout(() => {
+                    trail.remove();
+                }, 1000);
+            }
+        });
+
+        // Random glitch effect on scroll
+        let lastScroll = 0;
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            
+            if (Math.random() > 0.95 && Math.abs(currentScroll - lastScroll) > 50) {
+                document.body.style.animation = 'glitch 0.1s';
+                setTimeout(() => {
+                    document.body.style.animation = '';
+                }, 100);
+            }
+            
+            lastScroll = currentScroll;
+        });
+
+        // Easter egg: click on Millie multiple times
+        let clickCount = 0;
+        document.querySelectorAll('.millie-image').forEach(img => {
+            img.addEventListener('click', () => {
+                clickCount++;
+                if (clickCount >= 5) {
+                    document.body.style.animation = 'shake 0.5s';
+                    setTimeout(() => {
+                        alert('みてる…');
+                        document.body.style.animation = '';
+                        clickCount = 0;
+                    }, 500);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
