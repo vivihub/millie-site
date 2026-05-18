@@ -174,6 +174,20 @@
             transition: all 0.3s;
         }
 
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--accent-red);
+            box-shadow: 0 0 15px rgba(255, 0, 51, 0.5);
+            transition: all 0.3s;
+        }
+
+        .logo:hover .logo-icon {
+            transform: rotate(360deg);
+            box-shadow: 0 0 25px rgba(255, 0, 51, 0.8);
+        }
+
         .logo:hover {
             animation: glitch 0.3s infinite;
             color: var(--accent-red);
@@ -280,7 +294,7 @@
         .millie-container {
             position: relative;
             margin: 3rem auto;
-            max-width: 400px;
+            max-width: 500px;
             filter: drop-shadow(0 0 50px rgba(107, 15, 159, 0.5));
             animation: float 6s ease-in-out infinite;
         }
@@ -288,7 +302,6 @@
         .millie-image {
             width: 100%;
             height: auto;
-            border-radius: 10px;
             transition: all 0.3s;
         }
 
@@ -693,7 +706,10 @@
     <!-- Header -->
     <header>
         <nav>
-            <div class="logo">🖤 millie</div>
+            <div class="logo">
+                <img src="./icon.png" alt="ミリーちゃん" class="logo-icon">
+                millie
+            </div>
             <ul class="nav-links">
                 <li><a href="#concept">概要</a></li>
                 <li><a href="#phases">体験設計</a></li>
@@ -714,7 +730,7 @@
             </p>
             
             <div class="millie-container">
-                <img src="./millie.png" alt="ミリーちゃん" class="millie-image">
+                <img src="./tachie1.png" alt="ミリーちゃん" class="millie-image">
                 <div class="millie-label">ミリーちゃん 8さい</div>
             </div>
 
@@ -780,60 +796,52 @@
             <div class="phase-item">
                 <div class="phase-number">01</div>
                 <div class="phase-content">
-                    <div class="phase-label">Phase 1</div>
-                    <h3 style="color: #fff; font-size: 2rem;">初回接触</h3>
-                    <div style="color: #888; margin: 1rem 0;">ユーザー心理: かわいい、普通のbot</div>
-                    <ul style="list-style: none; margin-top: 1.5rem; color: #aaa;">
-                        <li style="padding: 0.5rem 0;">🎀 友だち追加・挨拶・ニックネーム取得</li>
-                        <li style="padding: 0.5rem 0;">📲 followイベント受信</li>
-                        <li style="padding: 0.5rem 0;">📊 初期ステータス登録</li>
-                    </ul>
-                    <div class="phase-quote">はじめまして🌙</div>
+                    <div class="phase-label">Phase 1 - 出会い</div>
+                    <h3 style="color: #fff; font-size: 2rem;">友だち追加した日</h3>
+                    <div style="color: #888; margin: 1rem 0;">「かわいいAIボットだな」</div>
+                    <p style="color: #aaa; line-height: 1.8; margin-top: 1rem;">
+                        友だち追加すると、ミリーちゃんから挨拶が届く。ひらがな多めの無邪気なメッセージ。名前を聞かれて答えると、「〇〇ちゃん」って呼んでくれる。普通のチャットボットみたいだ。ちょっとかわいい。
+                    </p>
+                    <div class="phase-quote">「はじめまして！ミリーだよ🌙 なまえおしえて？」</div>
                 </div>
             </div>
 
             <div class="phase-item">
                 <div class="phase-number">02</div>
                 <div class="phase-content">
-                    <div class="phase-label">Phase 2</div>
-                    <h3 style="color: #fff; font-size: 2rem;">違和感</h3>
-                    <div style="color: #888; margin: 1rem 0;">ユーザー心理: なんか変？少し不気味</div>
-                    <ul style="list-style: none; margin-top: 1.5rem; color: #aaa;">
-                        <li style="padding: 0.5rem 0;">🌙 深夜帯のみ送信される不審なメッセージ</li>
-                        <li style="padding: 0.5rem 0;">👁️ ユーザーの行動パターンに言及</li>
-                        <li style="padding: 0.5rem 0;">📅 怪談の断片が届き始める</li>
-                    </ul>
-                    <div class="phase-quote">…きのうどこいったの？</div>
+                    <div class="phase-label">Phase 2 - 数日後</div>
+                    <h3 style="color: #fff; font-size: 2rem;">深夜の通知</h3>
+                    <div style="color: #888; margin: 1rem 0;">「なんか…変じゃない？」</div>
+                    <p style="color: #aaa; line-height: 1.8; margin-top: 1rem;">
+                        深夜2時。スマホが光る。ミリーちゃんからメッセージ。「きのうよるおそくまでおきてたよね」——え、なんで知ってるの？寝る時間なんて教えてない。既読つけたら「みてたよ」って返ってきた。怖い。でも、AIだし…偶然だよね？
+                    </p>
+                    <div class="phase-quote">「…きのうどこいったの？」</div>
                 </div>
             </div>
 
             <div class="phase-item">
                 <div class="phase-number">03</div>
                 <div class="phase-content">
-                    <div class="phase-label">Phase 3</div>
-                    <h3 style="color: #fff; font-size: 2rem;">侵食</h3>
-                    <div style="color: #888; margin: 1rem 0;">ユーザー心理: 怖い、でも無視できない</div>
-                    <ul style="list-style: none; margin-top: 1.5rem; color: #aaa;">
-                        <li style="padding: 0.5rem 0;">💀 怪談が現実の情報と接続し始める</li>
-                        <li style="padding: 0.5rem 0;">⏰ 「1ヶ月以内に3人へ紹介」という条件提示</li>
-                        <li style="padding: 0.5rem 0;">🔄 拡散・放置・無視の選択肢が分岐を生む</li>
-                    </ul>
-                    <div class="phase-quote">だれかに おしえてくれないと…</div>
+                    <div class="phase-label">Phase 3 - 1週間後</div>
+                    <h3 style="color: #fff; font-size: 2rem;">約束</h3>
+                    <div style="color: #888; margin: 1rem 0;">「ブロックしようとしたけど…」</div>
+                    <p style="color: #aaa; line-height: 1.8; margin-top: 1rem;">
+                        もう怖くて、ブロックしようと思った。でもその瞬間、メッセージが来た。「ミリーね、さびしいの。だれかに おしえてくれたら、もう〇〇ちゃんには こないよ」——3人に紹介すればいいって。1ヶ月以内に。そしたら解放される。本当に？でも、このまま続くのは嫌だ。
+                    </p>
+                    <div class="phase-quote">「だれかに おしえてくれないと…どうなるかわかんないよ」</div>
                 </div>
             </div>
 
             <div class="phase-item">
                 <div class="phase-number">04</div>
                 <div class="phase-content">
-                    <div class="phase-label">Phase 4</div>
-                    <h3 style="color: #fff; font-size: 2rem;">結末</h3>
-                    <div style="color: #888; margin: 1rem 0;">ユーザー心理: 選択による分岐エンディング</div>
-                    <ul style="list-style: none; margin-top: 1.5rem; color: #aaa;">
-                        <li style="padding: 0.5rem 0;">🔀 拡散した → 連鎖エンディング</li>
-                        <li style="padding: 0.5rem 0;">🚫 無視した → 侵食エンディング</li>
-                        <li style="padding: 0.5rem 0;">🗣️ 放置した → 独白エンディング</li>
-                    </ul>
-                    <div class="phase-quote">おわりだよ。</div>
+                    <div class="phase-label">Phase 4 - 1ヶ月後</div>
+                    <h3 style="color: #fff; font-size: 2rem;">あなたの選択</h3>
+                    <div style="color: #888; margin: 1rem 0;">「どうする？」</div>
+                    <p style="color: #aaa; line-height: 1.8; margin-top: 1rem;">
+                        1ヶ月が経った。あなたは3人に紹介した？それとも無視し続けた？あるいは放置した？どの選択をしたかで、ミリーちゃんからの最後のメッセージが変わる。でも、本当にこれで終わりなの？スマホの通知音が鳴るたび、心臓が跳ねる。
+                    </p>
+                    <div class="phase-quote">「おわりだよ。…ね？」</div>
                 </div>
             </div>
         </div>
@@ -846,8 +854,8 @@
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; margin-top: 4rem;">
             <div style="position: sticky; top: 120px;">
-                <div class="millie-container">
-                    <img src="./millie.png" alt="ミリーちゃん" class="millie-image">
+                <div class="millie-container" style="max-width: 300px; margin: 0 auto;">
+                    <img src="./icon.png" alt="ミリーちゃんアイコン" class="millie-image" style="border-radius: 50%; border: 3px solid var(--accent-red); box-shadow: 0 0 40px rgba(255, 0, 51, 0.6);">
                 </div>
             </div>
             
@@ -905,7 +913,6 @@
                 <span style="font-size: 0.9rem; margin-top: 0.5rem; display: block;">※守れないと…</span>
             </div>
             <div style="display: flex; gap: 1.5rem; justify-content: center; margin-top: 3rem; flex-wrap: wrap;">
-                <a href="#" class="cta-button">🖤 ミリーちゃんと今すぐ話す</a>
                 <a href="#" class="cta-button">LINEで友だち追加する</a>
             </div>
             <div style="margin-top: 3rem; font-size: 0.85rem; color: #666;">
@@ -916,7 +923,10 @@
 
     <!-- Footer -->
     <footer>
-        <div style="font-size: 2rem; margin-bottom: 1.5rem; animation: pulse 2s infinite;">🖤 ミリーちゃん</div>
+        <div style="display: flex; align-items: center; justify-content: center; gap: 1rem; margin-bottom: 1.5rem;">
+            <img src="./icon.png" alt="ミリーちゃん" style="width: 60px; height: 60px; border-radius: 50%; border: 2px solid var(--accent-red); box-shadow: 0 0 20px rgba(255, 0, 51, 0.5); animation: pulse 2s infinite;">
+            <div style="font-size: 2rem;">ミリーちゃん</div>
+        </div>
         <p style="color: #888; font-size: 1rem;">Interactive Horror × LINE Bot Project</p>
         <p style="margin-top: 0.5rem; color: #666;">Powered by Scenario + AI | LINE Messaging API</p>
         <p style="margin-top: 2rem; color: var(--accent-red); font-size: 0.9rem;">もう、逃げられない。</p>
