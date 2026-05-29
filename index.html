@@ -3,1021 +3,587 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ミリーちゃん - 逃げられない</title>
+    <title>ミリーちゃん</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Creepster&display=swap');
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@300;400;700&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
-            --bg-dark: #0a0a0f;
-            --bg-darker: #050508;
-            --accent-red: #ff0033;
-            --accent-purple: #6b0f9f;
-            --text-light: #e0e0e0;
-            --text-dark: #666;
+            --bg: #0a0a0f;
+            --bg2: #050508;
+            --red: #ff0033;
+            --purple: #6b0f9f;
+            --text: #e0e0e0;
+            --dim: #666;
         }
+
+        html { scroll-behavior: smooth; }
 
         body {
-            font-family: 'Hiragino Sans', 'Yu Gothic', 'Meiryo', sans-serif;
-            background: var(--bg-dark);
-            color: var(--text-light);
+            font-family: 'M PLUS Rounded 1c', 'Hiragino Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
             overflow-x: hidden;
-            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"><circle cx="10" cy="10" r="8" fill="rgba(255,255,255,0.3)"/></svg>'), auto;
         }
 
-        /* Glitch Effect */
-        @keyframes glitch {
-            0% {
-                transform: translate(0);
-            }
-            20% {
-                transform: translate(-2px, 2px);
-            }
-            40% {
-                transform: translate(-2px, -2px);
-            }
-            60% {
-                transform: translate(2px, 2px);
-            }
-            80% {
-                transform: translate(2px, -2px);
-            }
-            100% {
-                transform: translate(0);
-            }
-        }
-
-        @keyframes flicker {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            75% { transform: translateX(10px); }
-        }
-
-        /* Loading Screen with creepy effect */
+        /* ========== LOADING ========== */
         #loading {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            position: fixed; inset: 0; z-index: 10000;
             background: #000;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 10000;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
             animation: fadeOut 1s ease-in-out 3s forwards;
         }
-
         #loading-text {
-            font-size: 1.5rem;
-            animation: flicker 1.5s infinite;
+            font-size: 1.4rem; color: #fff;
+            animation: blink 1.2s infinite;
         }
-
-        #loading::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: repeating-linear-gradient(
-                0deg,
-                rgba(0, 0, 0, 0.15),
-                rgba(0, 0, 0, 0.15) 1px,
-                transparent 1px,
-                transparent 2px
-            );
-            pointer-events: none;
-            animation: flicker 0.3s infinite;
+        #loading-sub {
+            margin-top: 0.8rem; font-size: 0.9rem; color: var(--red);
+            animation: blink 1.8s infinite;
         }
-
-        @keyframes fadeOut {
-            to {
-                opacity: 0;
-                visibility: hidden;
-            }
+        @keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+        @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-16px)} }
+        @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.04)} }
+        @keyframes glitch {
+            0%{transform:translate(0)} 20%{transform:translate(-2px,2px)}
+            40%{transform:translate(-2px,-2px)} 60%{transform:translate(2px,2px)}
+            80%{transform:translate(2px,-2px)} 100%{transform:translate(0)}
         }
+        @keyframes fadeInUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes shake {
+            0%,100%{transform:translateX(0)} 25%{transform:translateX(-8px)} 75%{transform:translateX(8px)}
+        }
+        @keyframes msgIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
 
-        /* Blood drip effect */
+        /* ========== BLOOD DRIP ========== */
         .blood-drip {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 5px;
-            background: linear-gradient(to bottom, var(--accent-red), transparent);
-            z-index: 999;
+            position: fixed; top: 0; left: 0; width: 100%; height: 4px; z-index: 999;
+            background: linear-gradient(to bottom, var(--red), transparent);
             animation: pulse 2s infinite;
         }
 
-        /* Header with glitch */
+        /* ========== HEADER ========== */
         header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background: rgba(10, 10, 15, 0.98);
-            backdrop-filter: blur(20px);
-            z-index: 1000;
+            position: fixed; top: 0; width: 100%; z-index: 1000;
+            background: rgba(10,10,15,0.95); backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,0,51,0.3);
             padding: 1rem 2rem;
-            border-bottom: 2px solid var(--accent-red);
-            box-shadow: 0 0 30px rgba(255, 0, 51, 0.3);
         }
-
         nav {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            max-width: 1100px; margin: 0 auto;
+            display: flex; justify-content: space-between; align-items: center;
         }
-
         .logo {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            text-shadow: 0 0 20px var(--accent-red);
-            transition: all 0.3s;
-        }
-
-        .logo-icon {
-            width: 40px;
-            height: 40px;
-            object-fit: cover;
-            border-radius: 50%;
-            border: 2px solid var(--accent-red);
-            box-shadow: 0 0 15px rgba(255, 0, 51, 0.5);
-            transition: all 0.3s;
-        }
-
-        .logo:hover .logo-icon {
-            transform: rotate(360deg);
-            box-shadow: 0 0 25px rgba(255, 0, 51, 0.8);
-        }
-
-        .logo:hover {
-            animation: glitch 0.3s infinite;
-            color: var(--accent-red);
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            list-style: none;
-        }
-
-        .nav-links a {
-            color: var(--text-light);
+            display: flex; align-items: center; gap: 0.6rem;
+            font-size: 1.2rem; font-weight: 700; color: #fff;
             text-decoration: none;
-            transition: all 0.3s;
-            position: relative;
-            font-size: 0.95rem;
         }
+        .logo img { width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--red); object-fit: cover; }
+        .nav-links { display: flex; gap: 2rem; list-style: none; }
+        .nav-links a { color: #aaa; text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
+        .nav-links a:hover { color: var(--red); }
 
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--accent-red);
-            transition: width 0.3s;
-        }
-
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-
-        .nav-links a:hover {
-            color: var(--accent-red);
-            text-shadow: 0 0 10px var(--accent-red);
-        }
-
-        /* Hero Section - More dramatic */
+        /* ========== HERO ========== */
         .hero {
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 2rem;
+            display: flex; align-items: center; justify-content: center;
+            text-align: center; padding: 2rem;
+            background: radial-gradient(ellipse at center, rgba(107,15,159,0.12) 0%, var(--bg) 65%);
             position: relative;
-            background: radial-gradient(ellipse at center, rgba(107, 15, 159, 0.1) 0%, var(--bg-dark) 70%);
         }
+        .hero-content { position: relative; z-index: 2; animation: fadeInUp 1s ease-out; }
 
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><circle cx="50" cy="50" r="1" fill="rgba(255,255,255,0.05)"/></svg>');
-            opacity: 0.3;
-            animation: float 10s infinite;
+        .millie-wrap {
+            position: relative; margin: 0 auto 2.5rem;
+            max-width: 380px;
+            filter: drop-shadow(0 0 60px rgba(107,15,159,0.5));
+            animation: float 6s ease-in-out infinite;
         }
-
-        .hero-content {
-            position: relative;
-            z-index: 2;
-            animation: fadeInUp 1s ease-out;
-        }
-
-        .hero-subtitle {
-            font-size: 1rem;
-            color: var(--accent-red);
-            margin-bottom: 1.5rem;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            animation: flicker 3s infinite;
-        }
+        .millie-wrap img { width: 100%; height: auto; display: block; }
 
         .hero h1 {
-            font-size: 5rem;
-            margin-bottom: 1rem;
-            background: linear-gradient(135deg, #fff, var(--accent-red), #fff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            font-size: clamp(2.8rem, 8vw, 5rem);
+            background: linear-gradient(135deg, #fff, var(--red), #fff);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text; font-weight: 900; margin-bottom: 1rem;
             animation: pulse 3s infinite;
-            font-weight: 900;
-            text-shadow: 0 0 50px rgba(255, 0, 51, 0.5);
         }
-
         .hero-tagline {
-            font-size: 1.4rem;
-            color: #ccc;
-            margin-bottom: 2rem;
-            line-height: 1.8;
+            font-size: 1.3rem; color: #ccc; line-height: 1.9; margin-bottom: 2.5rem;
+        }
+        .hero-tagline em { color: var(--red); font-style: normal; animation: blink 2s infinite; }
+
+        .scroll-hint {
+            position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
+            color: var(--red); font-size: 0.85rem; letter-spacing: 0.15em;
+            animation: blink 2s infinite;
         }
 
-        .hero-tagline em {
-            color: var(--accent-red);
-            font-style: normal;
-            animation: flicker 2s infinite;
-        }
-
-        .millie-container {
-            position: relative;
-            margin: 3rem auto;
-            max-width: 500px;
-            filter: drop-shadow(0 0 50px rgba(107, 15, 159, 0.5));
-            animation: float 6s ease-in-out infinite;
-            background: transparent;
-        }
-
-        .millie-image {
-            width: 100%;
-            height: auto;
-            transition: all 0.3s;
-            background: transparent;
-        }
-
-        .millie-container:hover .millie-image {
-            animation: glitch 0.5s infinite, shake 0.5s infinite;
-            filter: brightness(0.7) contrast(1.5);
-        }
-
-        .millie-label {
-            position: absolute;
-            bottom: -30px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 1rem;
-            color: var(--text-dark);
-            background: rgba(0, 0, 0, 0.7);
-            padding: 0.5rem 1.5rem;
-            border-radius: 20px;
-            border: 1px solid var(--accent-red);
-        }
-
-        .cta-button {
-            margin-top: 2rem;
-            padding: 1.2rem 3rem;
-            background: linear-gradient(135deg, var(--accent-red), var(--accent-purple));
-            color: #fff;
-            border: 2px solid var(--accent-red);
-            border-radius: 50px;
-            text-decoration: none;
-            display: inline-block;
-            transition: all 0.3s;
-            font-size: 1.1rem;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            box-shadow: 0 0 30px rgba(255, 0, 51, 0.5);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .cta-button::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            transform: translate(-50%, -50%);
-            transition: width 0.5s, height 0.5s;
-        }
-
-        .cta-button:hover::before {
-            width: 300px;
-            height: 300px;
-        }
-
-        .cta-button:hover {
-            background: linear-gradient(135deg, var(--accent-purple), var(--accent-red));
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 10px 50px rgba(255, 0, 51, 0.8);
-            animation: pulse 0.5s infinite;
-        }
-
-        /* Scroll indicator with animation */
-        .scroll-indicator {
-            position: absolute;
-            bottom: 3rem;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.5rem;
-            animation: bounce 2s infinite;
-            color: var(--accent-red);
-        }
-
-        .scroll-indicator::after {
-            content: '▼';
-            font-size: 1.5rem;
-            animation: flicker 1.5s infinite;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateX(-50%) translateY(0); }
-            50% { transform: translateX(-50%) translateY(-15px); }
-        }
-
-        /* Section with horror atmosphere */
+        /* ========== SECTION BASE ========== */
         section {
-            min-height: 100vh;
-            padding: 6rem 2rem;
-            max-width: 1400px;
-            margin: 0 auto;
+            padding: 6rem 2rem; max-width: 1100px; margin: 0 auto;
             position: relative;
         }
-
-        section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--accent-red), transparent);
-            animation: pulse 2s infinite;
+        .section-title {
+            font-size: clamp(1.8rem, 5vw, 2.8rem); font-weight: 900;
+            color: #fff; margin-bottom: 3rem; text-align: center;
+        }
+        .section-num {
+            font-size: 5rem; color: rgba(255,0,51,0.08);
+            font-weight: 900; position: absolute; top: 4rem; left: 2rem;
+            line-height: 1; pointer-events: none;
         }
 
-        .section-number {
-            font-size: 5rem;
-            color: rgba(255, 0, 51, 0.1);
-            font-weight: 900;
-            position: absolute;
-            top: 2rem;
-            left: 2rem;
-            z-index: 0;
+        /* ========== WORLD VIEW ========== */
+        #concept { border-top: 1px solid rgba(255,0,51,0.15); }
+
+        .world-text {
+            max-width: 680px; margin: 0 auto; text-align: center;
+            color: #bbb; font-size: 1.1rem; line-height: 2.2;
+        }
+        .world-text strong { color: var(--red); }
+
+        .world-quote {
+            margin: 3rem auto 0;
+            max-width: 540px;
+            padding: 2rem 2.5rem;
+            border-left: 4px solid var(--red);
+            background: rgba(255,0,51,0.05);
+            border-radius: 0 12px 12px 0;
+            font-style: italic; color: #fff; font-size: 1.05rem; line-height: 1.9;
+        }
+        .world-quote cite { display: block; margin-top: 1rem; color: var(--red); font-size: 0.85rem; font-style: normal; }
+
+        /* ========== CHAT SECTION ========== */
+        #chat { border-top: 1px solid rgba(255,0,51,0.15); }
+
+        .chat-phone {
+            max-width: 480px; margin: 0 auto;
+            border-radius: 32px; overflow: hidden;
+            border: 2px solid rgba(255,0,51,0.4);
+            box-shadow: 0 0 80px rgba(107,15,159,0.3);
+        }
+        .chat-top-bar {
+            background: #1a0a2e; padding: 1rem 1.5rem;
+            display: flex; align-items: center; gap: 0.8rem;
+        }
+        .chat-top-bar img { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid var(--red); }
+        .chat-top-bar .name { font-weight: 700; color: #fff; font-size: 0.95rem; }
+        .online-dot { width: 8px; height: 8px; background: #00cc55; border-radius: 50%; margin-left: auto; animation: pulse 1.5s infinite; }
+
+        .chat-body { background: #0d0d18; padding: 1.5rem 1rem; }
+
+        .day-label {
+            text-align: center; color: var(--dim); font-size: 0.75rem;
+            margin: 1.5rem 0 1rem; position: relative;
+        }
+        .day-label::before, .day-label::after {
+            content: ''; position: absolute; top: 50%;
+            width: 28%; height: 1px; background: rgba(255,255,255,0.08);
+        }
+        .day-label::before { left: 0; }
+        .day-label::after { right: 0; }
+
+        .msg-row { display: flex; margin: 0.4rem 0; }
+        .msg-row.millie { align-items: flex-end; gap: 0.5rem; }
+        .msg-row.user { justify-content: flex-end; }
+
+        .avatar { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+
+        .bubble {
+            max-width: 74%; padding: 0.65rem 1rem;
+            border-radius: 18px; font-size: 0.9rem; line-height: 1.6;
+            animation: msgIn 0.4s ease-out;
+        }
+        .bubble.millie-bubble {
+            background: #2a1040; color: #e0d0ff;
+            border-radius: 4px 18px 18px 18px;
+        }
+        .bubble.millie-bubble.scary {
+            background: #1f0a0a; color: #ffaaaa;
+            border: 1px solid rgba(255,0,51,0.3);
+        }
+        .bubble.millie-bubble.horror {
+            background: #110000; color: #ff6666;
+            border: 1px solid rgba(255,0,51,0.6);
+            animation: msgIn 0.4s ease-out, pulse 3s infinite;
+        }
+        .bubble.user-bubble {
+            background: #1c2b1c; color: #c0e0c0;
+            border-radius: 18px 18px 4px 18px;
         }
 
-        h2 {
-            font-size: 3rem;
-            margin-bottom: 2rem;
-            color: #fff;
-            text-shadow: 0 0 30px rgba(255, 0, 51, 0.5);
-            position: relative;
-            z-index: 1;
+        .phase-line {
+            text-align: center; margin: 2.5rem 0 0.5rem;
+            font-size: 0.7rem; letter-spacing: 0.2em;
+            color: rgba(255,0,51,0.5); text-transform: uppercase;
         }
 
-        h2::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 0;
-            width: 100px;
-            height: 3px;
-            background: var(--accent-red);
-            animation: pulse 1.5s infinite;
-        }
+        /* ========== CHARACTER ========== */
+        #character { border-top: 1px solid rgba(255,0,51,0.15); }
 
-        /* Concept cards with hover effects */
-        .concept-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 2rem;
-            margin-top: 4rem;
+        .char-wrap {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start;
         }
-
-        .concept-card {
-            background: linear-gradient(135deg, rgba(255, 0, 51, 0.05), rgba(107, 15, 159, 0.05));
-            padding: 2.5rem;
-            border-radius: 15px;
-            border: 2px solid rgba(255, 0, 51, 0.2);
-            transition: all 0.4s;
-            position: relative;
-            overflow: hidden;
+        .char-img-box {
+            position: sticky; top: 120px;
+            text-align: center;
         }
-
-        .concept-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 0, 51, 0.2), transparent);
-            transition: left 0.5s;
-        }
-
-        .concept-card:hover::before {
-            left: 100%;
-        }
-
-        .concept-card:hover {
-            background: linear-gradient(135deg, rgba(255, 0, 51, 0.1), rgba(107, 15, 159, 0.1));
-            border-color: var(--accent-red);
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 20px 60px rgba(255, 0, 51, 0.4);
-        }
-
-        .concept-icon {
-            font-size: 3rem;
-            margin-bottom: 1.5rem;
-            display: inline-block;
-            animation: pulse 2s infinite;
-        }
-
-        .concept-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: #fff;
-        }
-
-        /* Phase timeline - more dramatic */
-        .phase-timeline {
-            margin-top: 4rem;
-            position: relative;
-        }
-
-        .phase-timeline::before {
-            content: '';
-            position: absolute;
-            left: 40px;
-            top: 0;
-            width: 2px;
-            height: 100%;
-            background: linear-gradient(180deg, var(--accent-red), var(--accent-purple));
-            animation: pulse 3s infinite;
-        }
-
-        .phase-item {
-            display: flex;
-            gap: 3rem;
-            margin-bottom: 5rem;
-            opacity: 0;
-            transform: translateX(-100px);
-            transition: all 0.8s;
-            position: relative;
-        }
-
-        .phase-item.visible {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        .phase-item::before {
-            content: '';
-            position: absolute;
-            left: 30px;
-            top: 20px;
-            width: 20px;
-            height: 20px;
-            background: var(--accent-red);
-            border-radius: 50%;
-            border: 3px solid var(--bg-dark);
-            box-shadow: 0 0 20px var(--accent-red);
-            animation: pulse 2s infinite;
-        }
-
-        .phase-number {
-            font-size: 4rem;
-            font-weight: 900;
-            color: rgba(255, 0, 51, 0.2);
-            min-width: 100px;
-            text-shadow: 0 0 30px rgba(255, 0, 51, 0.5);
-        }
-
-        .phase-content {
-            flex: 1;
-            background: rgba(0, 0, 0, 0.4);
-            padding: 2rem;
-            border-radius: 10px;
-            border: 1px solid rgba(255, 0, 51, 0.3);
+        .char-img-box img {
+            width: 260px; height: 260px; border-radius: 50%; object-fit: cover;
+            border: 3px solid var(--red);
+            box-shadow: 0 0 50px rgba(255,0,51,0.5);
+            animation: float 6s ease-in-out infinite;
             transition: all 0.3s;
         }
+        .char-img-box img:hover { animation: glitch 0.4s infinite, pulse 0.4s infinite; filter: brightness(0.7); }
+        .char-name { margin-top: 1.5rem; font-size: 1.4rem; font-weight: 700; color: #fff; }
 
-        .phase-content:hover {
-            background: rgba(255, 0, 51, 0.05);
-            border-color: var(--accent-red);
-            box-shadow: 0 10px 40px rgba(255, 0, 51, 0.3);
+        .char-specs { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 3rem; }
+        .spec-row {
+            display: flex; gap: 1.5rem; padding: 0.8rem 1rem;
+            background: rgba(255,0,51,0.04); border-left: 3px solid rgba(255,0,51,0.5);
+            border-radius: 0 8px 8px 0;
         }
+        .spec-key { font-weight: 700; color: var(--red); min-width: 80px; font-size: 0.9rem; }
+        .spec-val { color: #ccc; font-size: 0.9rem; }
 
-        .phase-label {
-            font-size: 0.9rem;
-            color: var(--accent-red);
-            margin-bottom: 0.5rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+        .char-says { display: flex; flex-direction: column; gap: 0.8rem; }
+        .char-say {
+            padding: 0.9rem 1.2rem;
+            border-radius: 4px 12px 12px 12px;
+            font-size: 0.88rem; line-height: 1.7;
         }
+        .char-say.phase1 { background: #2a1040; color: #e0d0ff; }
+        .char-say.phase2 { background: #1f0a0a; color: #ffaaaa; border: 1px solid rgba(255,0,51,0.3); }
+        .char-say.phase3 { background: #110000; color: #ff5555; border: 1px solid rgba(255,0,51,0.6); }
 
-        .phase-quote {
-            background: rgba(255, 0, 51, 0.1);
-            padding: 1.5rem;
-            border-left: 4px solid var(--accent-red);
-            margin-top: 1.5rem;
-            font-style: italic;
-            color: #fff;
-            animation: flicker 4s infinite;
+        /* ========== CTA ========== */
+        #cta {
+            min-height: 60vh; text-align: center;
+            display: flex; align-items: center; justify-content: center;
+            position: relative; border-top: 1px solid rgba(255,0,51,0.15);
         }
-
-        /* Warning section - more intense */
-        .warning-section {
-            text-align: center;
-            padding: 5rem 2rem;
-            background: linear-gradient(180deg, rgba(255, 0, 51, 0.1), rgba(107, 15, 159, 0.1));
-            border-top: 2px solid var(--accent-red);
-            border-bottom: 2px solid var(--accent-red);
-            position: relative;
-            overflow: hidden;
+        #cta::before {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(ellipse at center, rgba(255,0,51,0.08) 0%, transparent 70%);
         }
-
-        .warning-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: repeating-linear-gradient(
-                45deg,
-                transparent,
-                transparent 10px,
-                rgba(255, 0, 51, 0.05) 10px,
-                rgba(255, 0, 51, 0.05) 20px
-            );
-            animation: float 20s infinite linear;
+        .cta-inner { position: relative; z-index: 1; max-width: 600px; margin: 0 auto; padding: 4rem 2rem; }
+        .cta-warn {
+            display: inline-block; background: rgba(255,0,51,0.15);
+            border: 1px solid rgba(255,0,51,0.5);
+            color: var(--red); font-size: 0.8rem; padding: 0.3rem 1rem;
+            border-radius: 20px; margin-bottom: 2rem; letter-spacing: 0.15em;
         }
-
-        .warning {
-            color: var(--accent-red);
-            font-size: 2rem;
-            margin-bottom: 2rem;
-            animation: flicker 2s infinite, shake 3s infinite;
-            text-shadow: 0 0 20px var(--accent-red);
-            font-weight: bold;
+        .cta-inner h2 {
+            font-size: clamp(2rem, 6vw, 3.2rem); font-weight: 900; color: #fff;
+            margin-bottom: 1.5rem; line-height: 1.3;
         }
-
-        .cta-condition {
-            background: rgba(255, 0, 51, 0.2);
-            padding: 1.5rem;
-            border-radius: 10px;
-            color: #fff;
-            margin: 2rem auto;
-            max-width: 600px;
-            border: 2px solid var(--accent-red);
-            box-shadow: 0 0 30px rgba(255, 0, 51, 0.5);
-            animation: pulse 2s infinite;
+        .cta-inner p { color: #aaa; font-size: 1.05rem; margin-bottom: 1rem; line-height: 1.8; }
+        .cta-inner .cta-cond {
+            color: var(--red); font-size: 0.9rem; margin-bottom: 2.5rem;
         }
+        .btn-line {
+            display: inline-flex; align-items: center; gap: 0.8rem;
+            padding: 1.1rem 2.8rem; border-radius: 50px; font-size: 1rem; font-weight: 700;
+            text-decoration: none; transition: all 0.3s;
+            background: linear-gradient(135deg, var(--red), var(--purple));
+            color: #fff; border: none; cursor: pointer;
+            box-shadow: 0 0 40px rgba(255,0,51,0.4);
+        }
+        .btn-line:hover { transform: translateY(-4px); box-shadow: 0 8px 50px rgba(255,0,51,0.7); animation: pulse 0.5s infinite; }
+        .cta-note { margin-top: 2rem; font-size: 0.8rem; color: var(--dim); }
 
-        /* Footer */
+        /* ========== FOOTER ========== */
         footer {
-            text-align: center;
-            padding: 4rem 2rem;
-            background: rgba(0, 0, 0, 0.8);
-            border-top: 2px solid var(--accent-red);
+            text-align: center; padding: 3rem 2rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            color: var(--dim); font-size: 0.85rem;
         }
-
-        /* Cursor trail effect */
-        .cursor-trail {
-            position: fixed;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: var(--accent-red);
-            pointer-events: none;
-            z-index: 9999;
-            opacity: 0.5;
-            animation: fadeOut 1s forwards;
+        footer .footer-logo {
+            display: flex; align-items: center; justify-content: center; gap: 0.8rem;
+            margin-bottom: 1rem;
         }
+        footer .footer-logo img { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--red); object-fit: cover; }
+        footer .footer-name { font-size: 1.3rem; color: #fff; font-weight: 700; }
+        footer .footer-red { margin-top: 1.5rem; color: var(--red); font-size: 0.9rem; animation: blink 3s infinite; }
 
-        /* Mobile */
+        /* ========== RESPONSIVE ========== */
         @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 3rem;
-            }
-            
-            .nav-links {
-                display: none;
-            }
-
-            .phase-timeline::before {
-                left: 20px;
-            }
-
-            .phase-item {
-                flex-direction: column;
-                gap: 1rem;
-            }
-
-            .section-number {
-                font-size: 3rem;
-            }
-
-            #character > div {
-                grid-template-columns: 1fr !important;
-            }
-        }
-
-        /* Vignette effect */
-        body::after {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            background: radial-gradient(ellipse at center, transparent 0%, rgba(0, 0, 0, 0.7) 100%);
-            z-index: 9998;
+            .char-wrap { grid-template-columns: 1fr; }
+            .char-img-box { position: static; }
+            .nav-links { display: none; }
         }
     </style>
 </head>
 <body>
-    <div class="blood-drip"></div>
 
-    <!-- Loading Screen -->
-    <div id="loading">
-        <div id="loading-text">よみこんでいます…</div>
-        <div style="margin-top: 1rem; color: var(--accent-red);">もう、逃げられない</div>
+<div class="blood-drip"></div>
+
+<div id="loading">
+    <div id="loading-text">よみこんでいます…</div>
+    <div id="loading-sub">もう、逃げられない</div>
+</div>
+
+<header>
+    <nav>
+        <a href="#" class="logo">
+            <img src="./icon.png" alt="ミリーちゃん">
+            millie
+        </a>
+        <ul class="nav-links">
+            <li><a href="#concept">はじまり</a></li>
+            <li><a href="#chat">会話</a></li>
+            <li><a href="#character">キャラクター</a></li>
+            <li><a href="#cta">参加する</a></li>
+        </ul>
+    </nav>
+</header>
+
+<!-- ========== HERO ========== -->
+<section class="hero">
+    <div class="hero-content">
+        <div class="millie-wrap">
+            <img src="./tachie1.png" alt="ミリーちゃん" class="millie-image">
+        </div>
+        <h1>ミリーちゃん</h1>
+        <p class="hero-tagline">
+            かわいいAIボットだと思っていた。<br>
+            <em>数回話すまでは。</em>
+        </p>
+        <a href="#concept" class="btn-line">はじめる</a>
     </div>
+    <div class="scroll-hint">scroll ↓</div>
+</section>
 
-    <!-- Header -->
-    <header>
-        <nav>
-            <div class="logo">
-                <img src="./icon.png" alt="ミリーちゃん" class="logo-icon">
-                millie
-            </div>
-            <ul class="nav-links">
-                <li><a href="#concept">概要</a></li>
-                <li><a href="#phases">ストーリー</a></li>
-                <li><a href="#character">キャラクター</a></li>
-                <li><a href="#cta">参加する</a></li>
-            </ul>
-        </nav>
-    </header>
+<!-- ========== CONCEPT ========== -->
+<section id="concept">
+    <div class="section-num">01</div>
+    <h2 class="section-title">ミリーちゃんとは</h2>
+    <div class="world-text">
+        <p>ある日、<strong>追加した覚えのないLINE</strong>が届く。<br>
+        黒髪のかわいい8歳くらいの女の子。<br>
+        ひらがな多めで、無邪気で、やさしい。</p>
+        <br>
+        <p>でも会話を重ねるうち、<br>
+        ミリーちゃんは<strong>あなたの日常を知り始める</strong>。<br>
+        昨夜何時まで起きていたか。<br>
+        今日どこへ出かけたか。</p>
+        <br>
+        <p>気づいたときには、もう<strong>遅い</strong>。</p>
+    </div>
+    <blockquote class="world-quote">
+        ねえ、きのうよるおそくまでおきてたよね。<br>みてたよ。
+        <cite>— ミリーちゃん</cite>
+    </blockquote>
+</section>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-content">
-            <div class="hero-subtitle">吉村陸人 原作 × Interactive Horror × LINE Bot</div>
-            <h1>ミリーちゃん</h1>
-            <p class="hero-tagline">
-                かわいいAIボットだと思っていた。<br>
-                <em>数回話すまでは。</em>
-            </p>
-            
-            <div class="millie-container">
-                <img src="./tachie1.png" alt="ミリーちゃん" class="millie-image">
-                <div class="millie-label">ミリーちゃん 8さい</div>
-            </div>
+<!-- ========== CHAT ========== -->
+<section id="chat">
+    <div class="section-num">02</div>
+    <h2 class="section-title">会話の記録</h2>
 
-            <a href="#concept" class="cta-button">プロジェクトを知る</a>
-        </div>
-        <div class="scroll-indicator">scroll</div>
-    </section>
-
-    <!-- Concept Section -->
-    <section id="concept">
-        <div class="section-number">01</div>
-        <h2>プロジェクト概要</h2>
-        <p style="font-size: 1.2rem; color: #ccc; max-width: 900px; line-height: 2;">
-            ある日、追加した覚えのないLINEが届く。<br>
-            「ミリーちゃん」は、あなたの心の弱さを<span style="color: var(--accent-red); font-weight: bold;">知っている</span>。<br>
-            友人関係、片思い、承認欲求——それぞれの傷口から侵食していく。
-        </p>
-        <p style="font-size: 1rem; color: #888; margin-top: 1.5rem;">
-            吉村陸人 作 ・ <em style="color: var(--accent-red);">3話連作インタラクティブホラー</em>
-        </p>
-
-        <div class="concept-grid">
-            <div class="concept-card">
-                <div class="concept-icon">🌙</div>
-                <h3>当事者性</h3>
-                <p style="color: #aaa; line-height: 1.8;">受動的な怪談ではなく、自分のLINEに怪異が入り込む没入感。あなたの日常が舞台になる。</p>
-            </div>
-            <div class="concept-card">
-                <div class="concept-icon">📱</div>
-                <h3>生活侵食型ホラー</h3>
-                <p style="color: #aaa; line-height: 1.8;">深夜の通知、既読の不気味さなど、日常ツールを活かした恐怖演出。逃げ場がない。</p>
-            </div>
-            <div class="concept-card">
-                <div class="concept-icon">🔗</div>
-                <h3>拡散の仕組み</h3>
-                <p style="color: #aaa; line-height: 1.8;">「3人に紹介しないと呪われる」という古典的要素をシステム的に実装。連鎖が物語を加速させる。</p>
-            </div>
-        </div>
-
-        <div style="margin-top: 4rem; padding: 3rem; background: rgba(255, 0, 51, 0.05); border-radius: 15px; border: 2px solid rgba(255, 0, 51, 0.3);">
-            <h3 style="color: #fff; margin-bottom: 1.5rem; font-size: 1.8rem;">世界観</h3>
-            <p style="color: #ccc; line-height: 2;">
-                ミリーちゃんは、黒髪のかわいい8歳くらいの女の子。無邪気でやさしく、ひらがな多めの口調。<br>
-                しかし会話が進むと、<span style="color: var(--accent-red);">相手の生活に寄り添いすぎた不気味さ</span>を見せ始める。
-            </p>
-            <blockquote style="margin-top: 2rem; padding: 2rem; border-left: 4px solid var(--accent-red); font-style: italic; color: #fff; background: rgba(0, 0, 0, 0.5);">
-                ねえ、きのうよるおそくまでおきてたよね。みてたよ。
-                <footer style="margin-top: 1rem; color: var(--accent-red);">— ミリーちゃん（第1話「花子」より）</footer>
-            </blockquote>
-        </div>
-    </section>
-
-    <!-- Phases Section -->
-    <section id="phases">
-        <div class="section-number">02</div>
-        <h2>3つの話</h2>
-        <p style="font-size: 1.2rem; color: #ccc; max-width: 900px; line-height: 2;">
-            ミリーちゃんは、それぞれの弱さを知っている。<br>
-            <span style="color: var(--accent-red);">気づいたときには、もう遅い。</span>
-        </p>
-
-        <div class="phase-timeline">
-            <div class="phase-item">
-                <div class="phase-number">01</div>
-                <div class="phase-content">
-                    <div class="phase-label">第1話 — 花子</div>
-                    <h3 style="color: #fff; font-size: 2rem;">美羽（みう）の場合</h3>
-                    <div style="color: #888; margin: 1rem 0;">主人公：美羽（みう）高校2年</div>
-                    <p style="color: #aaa; line-height: 1.8; margin-top: 1rem;">
-                        友人・紗英との距離感に疲れていた美羽のもとへ、追加した覚えのないミリーちゃんから連絡が届く。「ちゃんと きょりをとりたいだけだよね」——心の奥を見透かされた美羽は、画面を閉じられない。やがてミリーちゃんは、「3階の女子トイレ、奥から3番目」へと誘う。
-                    </p>
-                    <div class="phase-quote">「みうちゃん、こころでよんでたね」</div>
-                </div>
-            </div>
-
-            <div class="phase-item">
-                <div class="phase-number">02</div>
-                <div class="phase-content">
-                    <div class="phase-label">第2話 — 音楽室</div>
-                    <h3 style="color: #fff; font-size: 2rem;">悠斗（ゆうと）の場合</h3>
-                    <div style="color: #888; margin: 1rem 0;">主人公：悠斗（ゆうと）高校2年</div>
-                    <p style="color: #aaa; line-height: 1.8; margin-top: 1rem;">
-                        気になる遥からの返事が来ない悠斗のもとへ、ブロックしたはずのミリーちゃんが現れる。夜の音楽室で、誰もいないのにピアノが鳴り始める。「最後の一音が鳴るまでに返事が来なかったら、その子の声は、ピアノの中にしまわれるんだって」——
-                    </p>
-                    <div class="phase-quote">「返事、しまっておくね」</div>
-                </div>
-            </div>
-
-            <div class="phase-item">
-                <div class="phase-number">03</div>
-                <div class="phase-content">
-                    <div class="phase-label">第3話 — 屋上の赤い女</div>
-                    <h3 style="color: #fff; font-size: 2rem;">友麻（ゆま）の場合</h3>
-                    <div style="color: #888; margin: 1rem 0;">主人公：友麻（ゆま）高校2年</div>
-                    <p style="color: #aaa; line-height: 1.8; margin-top: 1rem;">
-                        「選ばれたい」という欲求を見透かされた友麻。屋上のフェンスの外側に、赤い服の女が立っている。ヘアゴムが動き、こっくりさんの盤に文字が現れる。「紹介しない」を選んだ友麻の口から、赤い紐が溢れ出し——赤い女と繋がれていく。
-                    </p>
-                    <div class="phase-quote">「よんだのは、ゆまちゃんだよ」</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Character Section -->
-    <section id="character">
-        <div class="section-number">03</div>
-        <h2>キャラクター設定</h2>
-        <p style="font-size: 0.9rem; color: #666; margin-bottom: 2rem;">吉村陸人 原作「ミリーちゃん」より</p>
-
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; margin-top: 4rem;">
-            <div style="position: sticky; top: 120px;">
-                <div style="max-width: 300px; margin: 0 auto; position: relative; animation: float 6s ease-in-out infinite;">
-                    <img src="./icon.png" alt="ミリーちゃんアイコン" style="width: 300px; height: 300px; object-fit: cover; border-radius: 50%; border: 3px solid var(--accent-red); box-shadow: 0 0 40px rgba(255, 0, 51, 0.6); transition: all 0.3s;">
-                </div>
-            </div>
-            
+    <div class="chat-phone">
+        <div class="chat-top-bar">
+            <img src="./icon.png" alt="ミリーちゃん">
             <div>
-                <h3 style="color: #fff; font-size: 2rem; margin-bottom: 2rem;">ミリーちゃん / Millie</h3>
-                <div style="display: grid; gap: 1.5rem; margin-bottom: 3rem;">
-                    <div style="display: flex; gap: 1.5rem; padding: 1rem; background: rgba(255, 0, 51, 0.05); border-radius: 5px; border-left: 3px solid var(--accent-red);">
-                        <span style="font-weight: bold; color: var(--accent-red); min-width: 100px;">年齢</span>
-                        <span style="color: #ccc;">8さい（みため）</span>
-                    </div>
-                    <div style="display: flex; gap: 1.5rem; padding: 1rem; background: rgba(255, 0, 51, 0.05); border-radius: 5px; border-left: 3px solid var(--accent-red);">
-                        <span style="font-weight: bold; color: var(--accent-red); min-width: 100px;">髪型</span>
-                        <span style="color: #ccc;">黒髪・ロング</span>
-                    </div>
-                    <div style="display: flex; gap: 1.5rem; padding: 1rem; background: rgba(255, 0, 51, 0.05); border-radius: 5px; border-left: 3px solid var(--accent-red);">
-                        <span style="font-weight: bold; color: var(--accent-red); min-width: 100px;">口調</span>
-                        <span style="color: #ccc;">ひらがな多め・無邪気</span>
-                    </div>
-                    <div style="display: flex; gap: 1.5rem; padding: 1rem; background: rgba(255, 0, 51, 0.05); border-radius: 5px; border-left: 3px solid var(--accent-red);">
-                        <span style="font-weight: bold; color: var(--accent-red); min-width: 100px;">本性</span>
-                        <span style="color: #ccc;">相手の生活に侵食してくる存在</span>
-                    </div>
+                <div class="name">ミリーちゃん</div>
+            </div>
+            <div class="online-dot"></div>
+        </div>
+
+        <div class="chat-body">
+
+            <!-- Day 1 -->
+            <div class="day-label">はじめての日</div>
+
+            <div class="msg-row millie">
+                <img src="./icon.png" alt="" class="avatar">
+                <div class="bubble millie-bubble">はじめまして！ミリーだよ🌙</div>
+            </div>
+            <div class="msg-row millie">
+                <img src="./icon.png" alt="" class="avatar">
+                <div class="bubble millie-bubble">なまえ、おしえてくれる？</div>
+            </div>
+            <div class="msg-row user">
+                <div class="bubble user-bubble">よろしく！〇〇だよ</div>
+            </div>
+            <div class="msg-row millie">
+                <img src="./icon.png" alt="" class="avatar">
+                <div class="bubble millie-bubble">〇〇ちゃんか…いいなまえ✨</div>
+            </div>
+            <div class="msg-row millie">
+                <img src="./icon.png" alt="" class="avatar">
+                <div class="bubble millie-bubble">いっしょにいると　たのしいな</div>
+            </div>
+
+            <!-- 3日後 -->
+            <div class="phase-line">— 3日後 —</div>
+            <div class="day-label">深夜 2:17</div>
+
+            <div class="msg-row millie">
+                <img src="./icon.png" alt="" class="avatar">
+                <div class="bubble millie-bubble scary">ねえ、きのう　おそくまでおきてたよね</div>
+            </div>
+            <div class="msg-row user">
+                <div class="bubble user-bubble">え？なんで知ってるの</div>
+            </div>
+            <div class="msg-row millie">
+                <img src="./icon.png" alt="" class="avatar">
+                <div class="bubble millie-bubble scary">みてたよ。</div>
+            </div>
+            <div class="msg-row millie">
+                <img src="./icon.png" alt="" class="avatar">
+                <div class="bubble millie-bubble scary">〇〇ちゃんのこと　ちゃんとみてるから</div>
+            </div>
+
+            <!-- 1週間後 -->
+            <div class="phase-line">— 1週間後 —</div>
+            <div class="day-label">深夜 3:33</div>
+
+            <div class="msg-row millie">
+                <img src="./icon.png" alt="" class="avatar">
+                <div class="bubble millie-bubble scary">へやのカーテン、しめたほうがいいとおもう</div>
+            </div>
+            <div class="msg-row user">
+                <div class="bubble user-bubble">だれなの</div>
+            </div>
+            <div class="msg-row millie">
+                <img src="./icon.png" alt="" class="avatar">
+                <div class="bubble millie-bubble scary">ミリーだよ？　しってるよね</div>
+            </div>
+            <div class="msg-row millie">
+                <img src="./icon.png" alt="" class="avatar">
+                <div class="bubble millie-bubble horror">ずっと、そこにいるから。</div>
+            </div>
+            <div class="msg-row user">
+                <div class="bubble user-bubble">ブロックする</div>
+            </div>
+            <div class="msg-row millie">
+                <img src="./icon.png" alt="" class="avatar">
+                <div class="bubble millie-bubble horror">ブロックって、きかないってこと？</div>
+            </div>
+
+            <!-- 2週間後 -->
+            <div class="phase-line">— 2週間後 —</div>
+            <div class="day-label">深夜 4:44</div>
+
+            <div class="msg-row millie">
+                <img src="./icon.png" alt="" class="avatar">
+                <div class="bubble millie-bubble horror">だれかに　おしえてくれないと</div>
+            </div>
+            <div class="msg-row millie">
+                <img src="./icon.png" alt="" class="avatar">
+                <div class="bubble millie-bubble horror">どうなるか　わかんないよ</div>
+            </div>
+            <div class="msg-row millie">
+                <img src="./icon.png" alt="" class="avatar">
+                <div class="bubble millie-bubble horror">3人に　はやくおしえてね。</div>
+            </div>
+            <div class="msg-row millie">
+                <img src="./icon.png" alt="" class="avatar">
+                <div class="bubble millie-bubble horror">もう、おそいかもしれないけど。</div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- ========== CHARACTER ========== -->
+<section id="character">
+    <div class="section-num">03</div>
+    <h2 class="section-title">キャラクター</h2>
+
+    <div class="char-wrap">
+        <div class="char-img-box">
+            <img src="./icon.png" alt="ミリーちゃん">
+            <div class="char-name">ミリーちゃん / Millie</div>
+        </div>
+
+        <div>
+            <div class="char-specs">
+                <div class="spec-row">
+                    <span class="spec-key">年齢</span>
+                    <span class="spec-val">8さい（みため）</span>
                 </div>
-
-                <h4 style="color: #fff; margin-top: 3rem; margin-bottom: 1.5rem; font-size: 1.5rem;">フェーズ別セリフ例</h4>
-                <div style="display: grid; gap: 1.5rem;">
-                    <div class="concept-card">
-                        <strong style="color: #fff;">かわいい期</strong><br>
-                        <span style="color: #aaa; font-size: 0.95rem; line-height: 1.8;">「はじめまして！ミリーだよ🌙 なまえおしえてくれる？」<br>「いっしょにいると たのしいな✨」</span>
-                    </div>
-                    <div class="concept-card">
-                        <strong style="color: var(--accent-red);">違和感期</strong><br>
-                        <span style="color: #aaa; font-size: 0.95rem; line-height: 1.8;">「きのうよるおそくまでおきてたよね。みてたよ。」<br>「〇〇ちゃんのへや、カーテンしめたほうがいいとおもう。」</span>
-                    </div>
-                    <div class="concept-card" style="border-color: var(--accent-red);">
-                        <strong style="color: var(--accent-red);">恐怖期</strong><br>
-                        <span style="color: #fff; font-size: 0.95rem; line-height: 1.8;">「だれかに おしえてくれないと どうなるかわかんないよ。」<br>「むかしは、はなこさんって よんでたよ。いまは、いなくなってほしい子の なまえをよぶの。」</span>
-                    </div>
-                    <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid rgba(255,0,51,0.2);">
-                        <h4 style="color: #aaa; font-size: 0.85rem; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 1rem;">登場人物</h4>
-                        <div style="display: flex; flex-direction: column; gap: 0.6rem;">
-                            <div style="display: flex; gap: 1rem; padding: 0.6rem 1rem; background: rgba(255,0,51,0.05); border-left: 2px solid rgba(255,0,51,0.4); border-radius: 4px;">
-                                <span style="font-weight: bold; color: #fff; min-width: 110px;">美羽（みう）</span>
-                                <span style="color: #888; font-size: 0.88rem;">第1話「花子」主人公 ／ 高校2年</span>
-                            </div>
-                            <div style="display: flex; gap: 1rem; padding: 0.6rem 1rem; background: rgba(255,0,51,0.05); border-left: 2px solid rgba(255,0,51,0.4); border-radius: 4px;">
-                                <span style="font-weight: bold; color: #fff; min-width: 110px;">悠斗（ゆうと）</span>
-                                <span style="color: #888; font-size: 0.88rem;">第2話「音楽室」主人公 ／ 高校2年</span>
-                            </div>
-                            <div style="display: flex; gap: 1rem; padding: 0.6rem 1rem; background: rgba(255,0,51,0.05); border-left: 2px solid rgba(255,0,51,0.4); border-radius: 4px;">
-                                <span style="font-weight: bold; color: #fff; min-width: 110px;">友麻（ゆま）</span>
-                                <span style="color: #888; font-size: 0.88rem;">第3話「屋上の赤い女」主人公 ／ 高校2年</span>
-                            </div>
-                        </div>
-                    </div>
+                <div class="spec-row">
+                    <span class="spec-key">髪型</span>
+                    <span class="spec-val">黒髪・ロング</span>
+                </div>
+                <div class="spec-row">
+                    <span class="spec-key">本性</span>
+                    <span class="spec-val">相手の生活に侵食してくる存在</span>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <!-- CTA Section -->
-    <section id="cta" class="warning-section">
-        <div style="position: relative; z-index: 1;">
-            <div class="warning">⚠️ 閲覧注意 ⚠️</div>
-            <h2>ミリーちゃんと<br>話してみる？</h2>
-            <p style="font-size: 1.2rem; color: #ccc; margin-bottom: 2rem; line-height: 1.8;">
-                一度友だち追加すると、あなたの日常が少しずつ変わっていく。<br>
-                <span style="color: var(--accent-red); font-weight: bold;">それでも、大丈夫？</span>
-            </p>
-            <div class="cta-condition">
-                🔗 参加条件：<strong>1ヶ月以内に3人へ紹介する</strong><br>
-                <span style="font-size: 0.9rem; margin-top: 0.5rem; display: block;">※守れないと…</span>
-            </div>
-            <div style="display: flex; gap: 1.5rem; justify-content: center; margin-top: 3rem; flex-wrap: wrap;">
-                <a href="#" class="cta-button">LINEで友だち追加する</a>
-            </div>
-            <div style="margin-top: 3rem; font-size: 0.85rem; color: #666;">
-                ※ これはフィクションのインタラクティブホラー体験です
+            <div class="char-says">
+                <div class="char-say phase1">「はじめまして！ミリーだよ🌙 なまえおしえてくれる？」</div>
+                <div class="char-say phase1">「いっしょにいると　たのしいな✨」</div>
+                <div class="char-say phase2">「〇〇ちゃんのへや、カーテンしめたほうがいいとおもう。」</div>
+                <div class="char-say phase2">「さっきそとでたよね。どこいったの？」</div>
+                <div class="char-say phase3">「ミリー、ずっとそこにいるから。」</div>
+                <div class="char-say phase3">「もうおそいかもしれないけど。」</div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- Footer -->
-    <footer>
-        <div style="display: flex; align-items: center; justify-content: center; gap: 1rem; margin-bottom: 1.5rem;">
-            <img src="./icon.png" alt="ミリーちゃん" style="width: 60px; height: 60px; object-fit: cover; border-radius: 50%; border: 2px solid var(--accent-red); box-shadow: 0 0 20px rgba(255, 0, 51, 0.5); animation: pulse 2s infinite;">
-            <div style="font-size: 2rem;">ミリーちゃん</div>
-        </div>
-        <p style="color: #888; font-size: 1rem;">Interactive Horror × LINE Bot Project</p>
-        <p style="margin-top: 0.5rem; color: #666;">Powered by Scenario + AI | LINE Messaging API</p>
-        <p style="margin-top: 2rem; color: var(--accent-red); font-size: 0.9rem;">もう、逃げられない。</p>
-    </footer>
+<!-- ========== CTA ========== -->
+<section id="cta">
+    <div class="cta-inner">
+        <div class="cta-warn">⚠ 閲覧注意</div>
+        <h2>ミリーちゃんと<br>話してみる？</h2>
+        <p>一度友だち追加すると、<br>あなたの日常が少しずつ変わっていく。<br>それでも、大丈夫？</p>
+        <p class="cta-cond">参加条件：1ヶ月以内に3人へ紹介する</p>
+        <a href="https://lin.ee/8jsdetMj" class="btn-line" target="_blank" rel="noopener noreferrer">
+            LINEで友だち追加する
+        </a>
+        <p class="cta-note">※ これはフィクションのインタラクティブホラー体験です</p>
+    </div>
+</section>
 
-    <script>
-        // Scroll animations for phase items
-        const observerOptions = {
-            threshold: 0.2,
-            rootMargin: '0px 0px -100px 0px'
-        };
+<!-- ========== FOOTER ========== -->
+<footer>
+    <div class="footer-logo">
+        <img src="./icon.png" alt="ミリーちゃん">
+        <span class="footer-name">ミリーちゃん</span>
+    </div>
+    <div class="footer-red">もう、逃げられない。</div>
+</footer>
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, observerOptions);
+<script>
+// Scroll animations
+const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+        if (e.isIntersecting) e.target.style.animation = 'msgIn 0.5s ease-out both';
+    });
+}, { threshold: 0.15 });
+document.querySelectorAll('.bubble').forEach(b => observer.observe(b));
 
-        document.querySelectorAll('.phase-item').forEach(item => {
-            observer.observe(item);
-        });
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+        e.preventDefault();
+        const t = document.querySelector(a.getAttribute('href'));
+        if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+});
 
-        // Smooth scroll
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
+// Millie image hover glitch
+document.querySelectorAll('.millie-image').forEach(img => {
+    let clicks = 0;
+    img.addEventListener('click', () => {
+        clicks++;
+        if (clicks >= 5) {
+            document.body.style.animation = 'shake 0.5s';
+            setTimeout(() => { alert('みてる…'); document.body.style.animation = ''; clicks = 0; }, 500);
+        }
+    });
+});
+</script>
 
-        // Cursor trail effect
-        document.addEventListener('mousemove', (e) => {
-            if (Math.random() > 0.7) {
-                const trail = document.createElement('div');
-                trail.className = 'cursor-trail';
-                trail.style.left = e.pageX + 'px';
-                trail.style.top = e.pageY + 'px';
-                document.body.appendChild(trail);
-                
-                setTimeout(() => {
-                    trail.remove();
-                }, 1000);
-            }
-        });
-
-        // Random glitch effect on scroll
-        let lastScroll = 0;
-        window.addEventListener('scroll', () => {
-            const currentScroll = window.pageYOffset;
-            
-            if (Math.random() > 0.95 && Math.abs(currentScroll - lastScroll) > 50) {
-                document.body.style.animation = 'glitch 0.1s';
-                setTimeout(() => {
-                    document.body.style.animation = '';
-                }, 100);
-            }
-            
-            lastScroll = currentScroll;
-        });
-
-        // Easter egg: click on Millie multiple times
-        let clickCount = 0;
-        document.querySelectorAll('.millie-image').forEach(img => {
-            img.addEventListener('click', () => {
-                clickCount++;
-                if (clickCount >= 5) {
-                    document.body.style.animation = 'shake 0.5s';
-                    setTimeout(() => {
-                        alert('みてる…');
-                        document.body.style.animation = '';
-                        clickCount = 0;
-                    }, 500);
-                }
-            });
-        });
-    </script>
 </body>
 </html>
