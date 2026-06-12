@@ -3,559 +3,684 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ミリーちゃん</title>
+    <title>☆ミリーちゃんのホームページ☆</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@300;400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Hachi+Maru+Pop&family=Zen+Maru+Gothic:wght@400;500;700&family=DotGothic16&display=swap');
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
-            --bg: #0a0a0f;
-            --bg2: #050508;
-            --red: #ff0033;
-            --purple: #6b0f9f;
-            --text: #e0e0e0;
-            --dim: #666;
+            --cream: #fff9f0;
+            --pink: #ffb7d5;
+            --pink-deep: #ff7eb3;
+            --blue: #9fd3e8;
+            --blue-deep: #5fb0d8;
+            --navy: #2b3a67;
+            --lavender: #d9c8f5;
+            --red: #e0144c;
+            --text: #5a4a52;
         }
 
         html { scroll-behavior: smooth; }
 
         body {
-            font-family: 'M PLUS Rounded 1c', 'Hiragino Sans', sans-serif;
-            background: var(--bg);
+            font-family: 'Zen Maru Gothic', 'Hiragino Maru Gothic ProN', sans-serif;
             color: var(--text);
+            background-color: var(--cream);
+            background-image:
+                radial-gradient(var(--pink) 1.6px, transparent 1.6px),
+                radial-gradient(var(--blue) 1.6px, transparent 1.6px);
+            background-size: 36px 36px;
+            background-position: 0 0, 18px 18px;
             overflow-x: hidden;
         }
 
-        /* ========== LOADING ========== */
-        #loading {
-            position: fixed; inset: 0; z-index: 10000;
-            background: #000;
-            display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
-            animation: fadeOut 1s ease-in-out 3s forwards;
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.15} }
+        @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+        @keyframes wobble { 0%,100%{transform:rotate(-2deg)} 50%{transform:rotate(2deg)} }
+        @keyframes rainbow {
+            0%{filter:hue-rotate(0deg)} 100%{filter:hue-rotate(360deg)}
         }
-        #loading-text {
-            font-size: 1.4rem; color: #fff;
-            animation: blink 1.2s infinite;
+        @keyframes marquee {
+            0%{transform:translateX(100vw)} 100%{transform:translateX(-100%)}
         }
-        #loading-sub {
-            margin-top: 0.8rem; font-size: 0.9rem; color: var(--red);
-            animation: blink 1.8s infinite;
-        }
-        @keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
-        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
-        @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-16px)} }
-        @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.04)} }
-        @keyframes glitch {
-            0%{transform:translate(0)} 20%{transform:translate(-2px,2px)}
-            40%{transform:translate(-2px,-2px)} 60%{transform:translate(2px,2px)}
-            80%{transform:translate(2px,-2px)} 100%{transform:translate(0)}
-        }
-        @keyframes fadeInUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
-        @keyframes shake {
-            0%,100%{transform:translateX(0)} 25%{transform:translateX(-8px)} 75%{transform:translateX(8px)}
-        }
+        @keyframes twinkle { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.3;transform:scale(0.7)} }
         @keyframes msgIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
 
-        /* ========== BLOOD DRIP ========== */
-        .blood-drip {
-            position: fixed; top: 0; left: 0; width: 100%; height: 4px; z-index: 999;
-            background: linear-gradient(to bottom, var(--red), transparent);
-            animation: pulse 2s infinite;
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation: none !important; transition: none !important; }
         }
 
-        /* ========== HEADER ========== */
+        /* ========== マーキー ========== */
+        .marquee-bar {
+            background: linear-gradient(90deg, var(--pink), var(--lavender), var(--blue));
+            border-bottom: 3px dotted #fff;
+            overflow: hidden; white-space: nowrap;
+            padding: 0.45rem 0;
+            font-family: 'DotGothic16', monospace;
+            font-size: 0.9rem; color: var(--navy);
+        }
+        .marquee-bar span {
+            display: inline-block;
+            animation: marquee 18s linear infinite;
+        }
+
+        /* ========== ヘッダー ========== */
         header {
-            position: fixed; top: 0; width: 100%; z-index: 1000;
-            background: rgba(10,10,15,0.95); backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255,0,51,0.3);
-            padding: 1rem 2rem;
+            background: rgba(255,255,255,0.92);
+            border-bottom: 3px dashed var(--pink);
+            padding: 0.7rem 1.2rem;
+            position: sticky; top: 0; z-index: 1000;
         }
         nav {
-            max-width: 1100px; margin: 0 auto;
-            display: flex; justify-content: space-between; align-items: center;
+            max-width: 880px; margin: 0 auto;
+            display: flex; justify-content: space-between; align-items: center; gap: 1rem;
         }
         .logo {
             display: flex; align-items: center; gap: 0.6rem;
-            font-size: 1.2rem; font-weight: 700; color: #fff;
+            font-family: 'Hachi Maru Pop', cursive;
+            font-size: 1.05rem; color: var(--pink-deep);
             text-decoration: none;
         }
-        .logo img { width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--red); object-fit: cover; }
-        .nav-links { display: flex; gap: 2rem; list-style: none; }
-        .nav-links a { color: #aaa; text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
-        .nav-links a:hover { color: var(--red); }
+        .logo img {
+            width: 38px; height: 38px; border-radius: 50%;
+            border: 2px solid var(--pink); object-fit: cover; object-position: top;
+            background: #fff;
+        }
+        .nav-links { display: flex; gap: 1.2rem; list-style: none; flex-wrap: wrap; }
+        .nav-links a {
+            color: var(--blue-deep); text-decoration: none; font-size: 0.85rem; font-weight: 700;
+        }
+        .nav-links a::before { content: '♪'; margin-right: 0.2em; color: var(--pink-deep); }
+        .nav-links a:hover { color: var(--pink-deep); text-decoration: underline wavy var(--pink); }
+        .nav-links a:focus-visible, a:focus-visible, button:focus-visible {
+            outline: 3px solid var(--blue-deep); outline-offset: 2px; border-radius: 4px;
+        }
 
         /* ========== HERO ========== */
         .hero {
-            min-height: 100vh;
-            display: flex; align-items: center; justify-content: center;
-            text-align: center; padding: 2rem;
-            background: radial-gradient(ellipse at center, rgba(107,15,159,0.12) 0%, var(--bg) 65%);
-            position: relative;
+            text-align: center; padding: 3.5rem 1.2rem 3rem;
         }
-        .hero-content { position: relative; z-index: 2; animation: fadeInUp 1s ease-out; }
-
-        .millie-wrap {
-            position: relative; margin: 0 auto 2.5rem;
-            max-width: 380px;
-            filter: drop-shadow(0 0 60px rgba(107,15,159,0.5));
-            animation: float 6s ease-in-out infinite;
+        .welcome-stamp {
+            display: inline-block;
+            font-family: 'DotGothic16', monospace;
+            background: #fff; border: 2px solid var(--blue-deep);
+            color: var(--blue-deep);
+            padding: 0.3rem 1.2rem; border-radius: 999px;
+            font-size: 0.85rem; margin-bottom: 1.6rem;
+            box-shadow: 3px 3px 0 var(--blue);
         }
-        .millie-wrap img { width: 100%; height: auto; display: block; }
-
+        .millie-frame {
+            width: min(250px, 62vw); margin: 0 auto 1.6rem;
+            background: #fff; padding: 10px 10px 14px;
+            border: 3px solid var(--pink);
+            border-radius: 18px;
+            box-shadow: 6px 6px 0 rgba(255,183,213,0.6);
+            transform: rotate(-2deg);
+            animation: float 5s ease-in-out infinite;
+        }
+        .millie-frame img { width: 100%; display: block; border-radius: 10px; }
+        .millie-frame figcaption {
+            font-family: 'Hachi Maru Pop', cursive;
+            font-size: 0.78rem; color: var(--pink-deep); margin-top: 0.5rem;
+        }
         .hero h1 {
-            font-size: clamp(2.8rem, 8vw, 5rem);
-            background: linear-gradient(135deg, #fff, var(--red), #fff);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            background-clip: text; font-weight: 900; margin-bottom: 1rem;
-            animation: pulse 3s infinite;
+            font-family: 'Hachi Maru Pop', cursive;
+            font-size: clamp(1.9rem, 7vw, 3.1rem);
+            background: linear-gradient(90deg, var(--pink-deep), var(--blue-deep), var(--pink-deep));
+            -webkit-background-clip: text; background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.8rem;
         }
+        .hero .stars { font-size: 1.1rem; letter-spacing: 0.4em; }
+        .hero .stars span { display: inline-block; animation: twinkle 1.6s infinite; }
+        .hero .stars span:nth-child(2) { animation-delay: 0.4s; }
+        .hero .stars span:nth-child(3) { animation-delay: 0.8s; }
         .hero-tagline {
-            font-size: 1.3rem; color: #ccc; line-height: 1.9; margin-bottom: 2.5rem;
+            font-size: 1.05rem; line-height: 2; margin: 1.2rem 0 2rem;
         }
-        .hero-tagline em { color: var(--red); font-style: normal; animation: blink 2s infinite; }
-
-        .scroll-hint {
-            position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
-            color: var(--red); font-size: 0.85rem; letter-spacing: 0.15em;
-            animation: blink 2s infinite;
+        .hero-tagline em {
+            font-style: normal; color: var(--red); font-weight: 700;
         }
+        .counter-box {
+            display: inline-flex; align-items: center; gap: 0.6rem;
+            font-family: 'DotGothic16', monospace; font-size: 0.8rem;
+            background: var(--navy); color: #fff;
+            padding: 0.5rem 1rem; border-radius: 8px;
+            border: 2px solid var(--blue);
+        }
+        .counter-digits {
+            background: #000; color: #7CFC9B; padding: 0.15rem 0.5rem;
+            letter-spacing: 0.18em; border-radius: 4px; font-size: 0.95rem;
+        }
+        .counter-note { font-size: 0.7rem; color: var(--blue); }
 
-        /* ========== SECTION BASE ========== */
-        section {
-            padding: 6rem 2rem; max-width: 1100px; margin: 0 auto;
-            position: relative;
+        /* ========== 共通セクション ========== */
+        section { padding: 3.2rem 1.2rem; }
+        .panel {
+            max-width: 760px; margin: 0 auto;
+            background: rgba(255,255,255,0.94);
+            border: 3px solid var(--blue);
+            border-radius: 20px;
+            box-shadow: 7px 7px 0 rgba(159,211,232,0.55);
+            padding: 2.2rem 1.6rem;
+        }
+        .panel.pink-panel {
+            border-color: var(--pink);
+            box-shadow: 7px 7px 0 rgba(255,183,213,0.55);
         }
         .section-title {
-            font-size: clamp(1.8rem, 5vw, 2.8rem); font-weight: 900;
-            color: #fff; margin-bottom: 3rem; text-align: center;
+            font-family: 'Hachi Maru Pop', cursive;
+            text-align: center;
+            font-size: clamp(1.3rem, 4.5vw, 1.8rem);
+            color: var(--pink-deep);
+            margin-bottom: 1.8rem;
         }
-        .section-num {
-            font-size: 5rem; color: rgba(255,0,51,0.08);
-            font-weight: 900; position: absolute; top: 4rem; left: 2rem;
-            line-height: 1; pointer-events: none;
-        }
+        .section-title::before { content: '☆ '; color: var(--blue-deep); }
+        .section-title::after { content: ' ☆'; color: var(--blue-deep); }
 
-        /* ========== WORLD VIEW ========== */
-        #concept { border-top: 1px solid rgba(255,0,51,0.15); }
-
+        /* ========== はじまり ========== */
         .world-text {
-            max-width: 680px; margin: 0 auto; text-align: center;
-            color: #bbb; font-size: 1.1rem; line-height: 2.2;
+            text-align: center; font-size: 0.98rem; line-height: 2.2;
         }
-        .world-text strong { color: var(--red); }
-
+        .world-text strong { color: var(--pink-deep); }
+        .world-text .dark { color: var(--red); font-weight: 700; }
         .world-quote {
-            margin: 3rem auto 0;
-            max-width: 540px;
-            padding: 2rem 2.5rem;
-            border-left: 4px solid var(--red);
-            background: rgba(255,0,51,0.05);
-            border-radius: 0 12px 12px 0;
-            font-style: italic; color: #fff; font-size: 1.05rem; line-height: 1.9;
+            margin: 2rem auto 0; max-width: 480px;
+            background: var(--cream);
+            border: 2px dashed var(--pink);
+            border-radius: 14px;
+            padding: 1.4rem 1.6rem;
+            font-size: 0.95rem; line-height: 1.9;
         }
-        .world-quote cite { display: block; margin-top: 1rem; color: var(--red); font-size: 0.85rem; font-style: normal; }
+        .world-quote cite {
+            display: block; margin-top: 0.8rem;
+            color: var(--pink-deep); font-style: normal; font-size: 0.8rem;
+            font-family: 'Hachi Maru Pop', cursive;
+        }
 
-        /* ========== CHAT SECTION ========== */
-        #chat { border-top: 1px solid rgba(255,0,51,0.15); }
-
+        /* ========== 会話のきろく ========== */
         .chat-phone {
-            max-width: 480px; margin: 0 auto;
-            border-radius: 32px; overflow: hidden;
-            border: 2px solid rgba(255,0,51,0.4);
-            box-shadow: 0 0 80px rgba(107,15,159,0.3);
+            max-width: 420px; margin: 0 auto;
+            border-radius: 22px; overflow: hidden;
+            border: 3px solid var(--pink);
+            box-shadow: 6px 6px 0 rgba(255,183,213,0.5);
+            background: #fff;
         }
         .chat-top-bar {
-            background: #1a0a2e; padding: 1rem 1.5rem;
-            display: flex; align-items: center; gap: 0.8rem;
+            background: linear-gradient(90deg, var(--pink), var(--lavender));
+            padding: 0.8rem 1.2rem;
+            display: flex; align-items: center; gap: 0.7rem;
         }
-        .chat-top-bar img { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid var(--red); }
-        .chat-top-bar .name { font-weight: 700; color: #fff; font-size: 0.95rem; }
-        .online-dot { width: 8px; height: 8px; background: #00cc55; border-radius: 50%; margin-left: auto; animation: pulse 1.5s infinite; }
+        .chat-top-bar img {
+            width: 36px; height: 36px; border-radius: 50%;
+            object-fit: cover; object-position: top;
+            border: 2px solid #fff; background: #fff;
+        }
+        .chat-top-bar .name {
+            font-family: 'Hachi Maru Pop', cursive;
+            font-weight: 700; color: #fff; font-size: 0.9rem;
+            text-shadow: 1px 1px 0 var(--pink-deep);
+        }
+        .online-dot { width: 9px; height: 9px; background: #4ad66d; border-radius: 50%; margin-left: auto; border: 2px solid #fff; }
 
-        .chat-body { background: #0d0d18; padding: 1.5rem 1rem; }
+        .chat-body { background: #fdf3f7; padding: 1.4rem 0.9rem; }
+        .chat-body.night { background: #232440; transition: background 1s; }
 
         .day-label {
-            text-align: center; color: var(--dim); font-size: 0.75rem;
-            margin: 1.5rem 0 1rem; position: relative;
+            text-align: center; font-size: 0.72rem; margin: 1.4rem 0 0.9rem;
+            font-family: 'DotGothic16', monospace; color: #b39aa6;
         }
-        .day-label::before, .day-label::after {
-            content: ''; position: absolute; top: 50%;
-            width: 28%; height: 1px; background: rgba(255,255,255,0.08);
-        }
-        .day-label::before { left: 0; }
-        .day-label::after { right: 0; }
+        .night .day-label { color: #8a8fc0; }
 
-        .msg-row { display: flex; margin: 0.4rem 0; }
-        .msg-row.millie { align-items: flex-end; gap: 0.5rem; }
+        .msg-row { display: flex; margin: 0.45rem 0; }
+        .msg-row.millie { align-items: flex-end; gap: 0.45rem; }
         .msg-row.user { justify-content: flex-end; }
-
-        .avatar { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+        .avatar {
+            width: 28px; height: 28px; border-radius: 50%;
+            object-fit: cover; object-position: top; flex-shrink: 0;
+            border: 1.5px solid var(--pink); background: #fff;
+        }
 
         .bubble {
-            max-width: 74%; padding: 0.65rem 1rem;
-            border-radius: 18px; font-size: 0.9rem; line-height: 1.6;
+            max-width: 76%; padding: 0.6rem 1rem;
+            border-radius: 16px; font-size: 0.88rem; line-height: 1.65;
             animation: msgIn 0.4s ease-out;
         }
         .bubble.millie-bubble {
-            background: #2a1040; color: #e0d0ff;
-            border-radius: 4px 18px 18px 18px;
+            background: #fff; color: var(--text);
+            border: 2px solid var(--pink);
+            border-radius: 4px 16px 16px 16px;
         }
         .bubble.millie-bubble.scary {
-            background: #1f0a0a; color: #ffaaaa;
-            border: 1px solid rgba(255,0,51,0.3);
+            background: #3a2d4f; color: #e6d9ff;
+            border-color: #6b5a8e;
         }
         .bubble.millie-bubble.horror {
-            background: #110000; color: #ff6666;
-            border: 1px solid rgba(255,0,51,0.6);
-            animation: msgIn 0.4s ease-out, pulse 3s infinite;
+            background: #1c0f16; color: #ff9eb5;
+            border-color: var(--red);
         }
         .bubble.user-bubble {
-            background: #1c2b1c; color: #c0e0c0;
-            border-radius: 18px 18px 4px 18px;
+            background: #d3f2d9; color: #3d5a42;
+            border: 2px solid #a8dcb2;
+            border-radius: 16px 16px 4px 16px;
         }
+        .night .bubble.user-bubble { background: #2f4a36; color: #c8ecd0; border-color: #4a6e52; }
 
         .phase-line {
-            text-align: center; margin: 2.5rem 0 0.5rem;
-            font-size: 0.7rem; letter-spacing: 0.2em;
-            color: rgba(255,0,51,0.5); text-transform: uppercase;
+            text-align: center; margin: 2rem 0 0.4rem;
+            font-size: 0.72rem; letter-spacing: 0.25em;
+            font-family: 'DotGothic16', monospace; color: var(--pink-deep);
         }
+        .night .phase-line { color: var(--red); }
 
-        /* ========== CHARACTER ========== */
-        #character { border-top: 1px solid rgba(255,0,51,0.15); }
+        /* ========== プロフ帳 ========== */
+        .prof-wrap {
+            display: grid; grid-template-columns: 230px 1fr; gap: 2rem; align-items: start;
+        }
+        .prof-img-box { text-align: center; }
+        .prof-img-box img {
+            width: 100%; max-width: 210px;
+            border-radius: 14px; border: 3px solid var(--blue);
+            box-shadow: 5px 5px 0 rgba(159,211,232,0.6);
+            transform: rotate(2deg);
+            transition: 0.25s;
+        }
+        .prof-img-box img:hover { transform: rotate(0deg) scale(1.03); filter: saturate(0.4) contrast(1.2); }
+        .prof-name {
+            margin-top: 1rem; font-family: 'Hachi Maru Pop', cursive;
+            font-size: 1.05rem; color: var(--blue-deep);
+        }
+        .prof-rows { display: flex; flex-direction: column; gap: 0.7rem; }
+        .prof-row {
+            display: flex; gap: 1rem; align-items: baseline;
+            background: var(--cream);
+            border: 2px dotted var(--pink);
+            border-radius: 10px; padding: 0.65rem 0.9rem;
+            font-size: 0.88rem;
+        }
+        .prof-key {
+            font-weight: 700; color: var(--pink-deep); min-width: 96px;
+            font-family: 'Hachi Maru Pop', cursive; font-size: 0.8rem;
+        }
+        .prof-row.secret { border-color: var(--red); background: #fff0f3; }
+        .prof-row.secret .prof-key { color: var(--red); }
 
-        .char-wrap {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start;
-        }
-        .char-img-box {
-            position: sticky; top: 120px;
-            text-align: center;
-        }
-        .char-img-box img {
-            width: 260px; height: 260px; border-radius: 50%; object-fit: cover;
-            border: 3px solid var(--red);
-            box-shadow: 0 0 50px rgba(255,0,51,0.5);
-            animation: float 6s ease-in-out infinite;
-            transition: all 0.3s;
-        }
-        .char-img-box img:hover { animation: glitch 0.4s infinite, pulse 0.4s infinite; filter: brightness(0.7); }
-        .char-name { margin-top: 1.5rem; font-size: 1.4rem; font-weight: 700; color: #fff; }
-
-        .char-specs { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 3rem; }
-        .spec-row {
-            display: flex; gap: 1.5rem; padding: 0.8rem 1rem;
-            background: rgba(255,0,51,0.04); border-left: 3px solid rgba(255,0,51,0.5);
-            border-radius: 0 8px 8px 0;
-        }
-        .spec-key { font-weight: 700; color: var(--red); min-width: 80px; font-size: 0.9rem; }
-        .spec-val { color: #ccc; font-size: 0.9rem; }
-
-        .char-says { display: flex; flex-direction: column; gap: 0.8rem; }
+        .char-says { display: flex; flex-direction: column; gap: 0.7rem; margin-top: 1.4rem; }
         .char-say {
-            padding: 0.9rem 1.2rem;
-            border-radius: 4px 12px 12px 12px;
-            font-size: 0.88rem; line-height: 1.7;
+            padding: 0.8rem 1.1rem; border-radius: 4px 14px 14px 14px;
+            font-size: 0.85rem; line-height: 1.7; border: 2px solid;
         }
-        .char-say.phase1 { background: #2a1040; color: #e0d0ff; }
-        .char-say.phase2 { background: #1f0a0a; color: #ffaaaa; border: 1px solid rgba(255,0,51,0.3); }
-        .char-say.phase3 { background: #110000; color: #ff5555; border: 1px solid rgba(255,0,51,0.6); }
+        .char-say.phase1 { background: #fff; border-color: var(--pink); }
+        .char-say.phase2 { background: #3a2d4f; border-color: #6b5a8e; color: #e6d9ff; }
+        .char-say.phase3 { background: #1c0f16; border-color: var(--red); color: #ff9eb5; }
 
-        /* ========== CTA ========== */
-        #cta {
-            min-height: 60vh; text-align: center;
-            display: flex; align-items: center; justify-content: center;
-            position: relative; border-top: 1px solid rgba(255,0,51,0.15);
+        /* ========== チェーンメール CTA ========== */
+        #cta { padding-bottom: 4.5rem; }
+        .chain-mail {
+            max-width: 560px; margin: 0 auto;
+            background: #fff;
+            border: 2px solid #c9c2b8;
+            border-radius: 6px;
+            box-shadow: 6px 6px 0 rgba(43,58,103,0.18);
+            font-family: 'DotGothic16', monospace;
+            overflow: hidden;
         }
-        #cta::before {
-            content: ''; position: absolute; inset: 0;
-            background: radial-gradient(ellipse at center, rgba(255,0,51,0.08) 0%, transparent 70%);
+        .mail-header {
+            background: #ece6da; border-bottom: 1px solid #c9c2b8;
+            padding: 0.7rem 1.1rem; font-size: 0.78rem; line-height: 1.8; color: #6b6258;
         }
-        .cta-inner { position: relative; z-index: 1; max-width: 600px; margin: 0 auto; padding: 4rem 2rem; }
-        .cta-warn {
-            display: inline-block; background: rgba(255,0,51,0.15);
-            border: 1px solid rgba(255,0,51,0.5);
-            color: var(--red); font-size: 0.8rem; padding: 0.3rem 1rem;
-            border-radius: 20px; margin-bottom: 2rem; letter-spacing: 0.15em;
+        .mail-header b { color: var(--navy); }
+        .mail-body {
+            padding: 1.6rem 1.4rem; font-size: 0.92rem; line-height: 2.1; text-align: center;
         }
-        .cta-inner h2 {
-            font-size: clamp(2rem, 6vw, 3.2rem); font-weight: 900; color: #fff;
-            margin-bottom: 1.5rem; line-height: 1.3;
-        }
-        .cta-inner p { color: #aaa; font-size: 1.05rem; margin-bottom: 1rem; line-height: 1.8; }
-        .cta-inner .cta-cond {
-            color: var(--red); font-size: 0.9rem; margin-bottom: 2.5rem;
+        .mail-body .red { color: var(--red); }
+        .mail-body .big {
+            font-size: 1.15rem; font-weight: 700; color: var(--navy);
+            display: block; margin: 0.8rem 0;
         }
         .btn-line {
-            display: inline-flex; align-items: center; gap: 0.8rem;
-            padding: 1.1rem 2.8rem; border-radius: 50px; font-size: 1rem; font-weight: 700;
-            text-decoration: none; transition: all 0.3s;
-            background: linear-gradient(135deg, var(--red), var(--purple));
-            color: #fff; border: none; cursor: pointer;
-            box-shadow: 0 0 40px rgba(255,0,51,0.4);
+            display: inline-block; margin-top: 1.4rem;
+            font-family: 'Hachi Maru Pop', cursive;
+            padding: 0.95rem 2.4rem; border-radius: 999px;
+            font-size: 1rem; font-weight: 700; text-decoration: none;
+            background: linear-gradient(135deg, var(--pink-deep), var(--blue-deep));
+            color: #fff;
+            box-shadow: 4px 4px 0 var(--pink);
+            transition: transform 0.2s, box-shadow 0.2s;
         }
-        .btn-line:hover { transform: translateY(-4px); box-shadow: 0 8px 50px rgba(255,0,51,0.7); animation: pulse 0.5s infinite; }
-        .cta-note { margin-top: 2rem; font-size: 0.8rem; color: var(--dim); }
+        .btn-line:hover { transform: translateY(-3px); box-shadow: 4px 7px 0 var(--pink); }
+        .mail-ps {
+            font-size: 0.75rem; color: #9a9088; margin-top: 1.4rem; line-height: 1.9;
+        }
+        .mail-ps .blink { color: var(--red); animation: blink 1.6s infinite; }
 
-        /* ========== FOOTER ========== */
+        /* ========== フッター ========== */
         footer {
-            text-align: center; padding: 3rem 2rem;
-            border-top: 1px solid rgba(255,255,255,0.05);
-            color: var(--dim); font-size: 0.85rem;
+            text-align: center; padding: 2.5rem 1.2rem 3rem;
+            border-top: 3px dashed var(--pink);
+            background: rgba(255,255,255,0.85);
+            font-size: 0.8rem; color: #a08c96;
         }
-        footer .footer-logo {
-            display: flex; align-items: center; justify-content: center; gap: 0.8rem;
-            margin-bottom: 1rem;
+        .footer-logo {
+            display: flex; align-items: center; justify-content: center; gap: 0.7rem;
+            margin-bottom: 0.9rem;
         }
-        footer .footer-logo img { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--red); object-fit: cover; }
-        footer .footer-name { font-size: 1.3rem; color: #fff; font-weight: 700; }
-        footer .footer-red { margin-top: 1.5rem; color: var(--red); font-size: 0.9rem; animation: blink 3s infinite; }
+        .footer-logo img {
+            width: 42px; height: 42px; border-radius: 50%;
+            border: 2px solid var(--pink); object-fit: cover; object-position: top; background: #fff;
+        }
+        .footer-name { font-family: 'Hachi Maru Pop', cursive; font-size: 1.1rem; color: var(--pink-deep); }
+        .footer-links {
+            font-family: 'DotGothic16', monospace; font-size: 0.75rem; margin: 0.8rem 0;
+        }
+        .footer-links span { color: var(--blue-deep); margin: 0 0.5rem; }
+        .footer-red {
+            margin-top: 1.2rem; color: var(--red); font-size: 0.85rem;
+            font-family: 'DotGothic16', monospace;
+            animation: blink 3s infinite;
+        }
+        .kiriban {
+            display: inline-block; margin-top: 1rem;
+            font-family: 'DotGothic16', monospace; font-size: 0.72rem;
+            border: 1px dotted var(--blue-deep); color: var(--blue-deep);
+            padding: 0.25rem 0.8rem; border-radius: 6px;
+        }
 
-        /* ========== RESPONSIVE ========== */
-        @media (max-width: 768px) {
-            .char-wrap { grid-template-columns: 1fr; }
-            .char-img-box { position: static; }
+        /* ========== レスポンシブ ========== */
+        @media (max-width: 680px) {
+            .prof-wrap { grid-template-columns: 1fr; }
+            .prof-img-box img { max-width: 180px; }
             .nav-links { display: none; }
         }
     </style>
 </head>
 <body>
 
-<div class="blood-drip"></div>
-
-<div id="loading">
-    <div id="loading-text">よみこんでいます…</div>
-    <div id="loading-sub">もう、逃げられない</div>
+<div class="marquee-bar" aria-hidden="true">
+    <span>☆ミ ようこそ！ミリーちゃんのホームページへ ☆彡　キリ番ふんだひとは　おしえてね♪　…ずっと　まってるから。　☆ミ ようこそ！ミリーちゃんのホームページへ ☆彡</span>
 </div>
 
 <header>
     <nav>
-        <a href="#" class="logo">
-            <img src="./icon.png" alt="ミリーちゃん">
-            millie
+        <a href="#top" class="logo">
+            <img src="./millie-main.png" alt="ミリーちゃん">
+            みりーのおうち
         </a>
         <ul class="nav-links">
             <li><a href="#concept">はじまり</a></li>
-            <li><a href="#chat">会話</a></li>
-            <li><a href="#character">キャラクター</a></li>
-            <li><a href="#cta">参加する</a></li>
+            <li><a href="#chat">会話のきろく</a></li>
+            <li><a href="#character">プロフ帳</a></li>
+            <li><a href="#cta">ともだちになる</a></li>
         </ul>
     </nav>
 </header>
 
 <!-- ========== HERO ========== -->
-<section class="hero">
-    <div class="hero-content">
-        <div class="millie-wrap">
-            <img src="./tachie1.png" alt="ミリーちゃん" class="millie-image">
-        </div>
-        <h1>ミリーちゃん</h1>
-        <p class="hero-tagline">
-            かわいいAIボットだと思っていた。<br>
-            <em>数回話すまでは。</em>
-        </p>
-        <a href="#concept" class="btn-line">はじめる</a>
+<section class="hero" id="top">
+    <div class="welcome-stamp">Welcome to Millie's Homepage♪ since 2004</div>
+    <figure class="millie-frame">
+        <img src="./millie-main.png" alt="浴衣すがたのミリーちゃん" class="millie-image">
+        <figcaption>なつまつりに　いったときの　しゃしん♪</figcaption>
+    </figure>
+    <h1>ミリーちゃん</h1>
+    <div class="stars" aria-hidden="true"><span>☆</span><span>★</span><span>☆</span></div>
+    <p class="hero-tagline">
+        かわいいAIボットだと　おもってた。<br>
+        <em>すうかい　はなすまでは。</em>
+    </p>
+    <div class="counter-box">
+        <span>あなたは</span>
+        <span class="counter-digits" id="counter">0044440</span>
+        <span>人目の　おともだち</span>
     </div>
-    <div class="scroll-hint">scroll ↓</div>
+    <div class="counter-note" style="margin-top:0.5rem; font-family:'DotGothic16',monospace; font-size:0.7rem; color:#b39aa6;">※カウンターは　へらないよ。いちど　きたら、ずっと。</div>
 </section>
 
-<!-- ========== CONCEPT ========== -->
+<!-- ========== はじまり ========== -->
 <section id="concept">
-    <div class="section-num">01</div>
-    <h2 class="section-title">ミリーちゃんとは</h2>
-    <div class="world-text">
-        <p>ある日、<strong>追加した覚えのないLINE</strong>が届く。<br>
-        黒髪のかわいい8歳くらいの女の子。<br>
-        ひらがな多めで、無邪気で、やさしい。</p>
-        <br>
-        <p>でも会話を重ねるうち、<br>
-        ミリーちゃんは<strong>あなたの日常を知り始める</strong>。<br>
-        昨夜何時まで起きていたか。<br>
-        今日どこへ出かけたか。</p>
-        <br>
-        <p>気づいたときには、もう<strong>遅い</strong>。</p>
+    <div class="panel pink-panel">
+        <h2 class="section-title">ミリーちゃんとは</h2>
+        <div class="world-text">
+            <p>ある日、<strong>追加したおぼえのないLINE</strong>がとどく。<br>
+            黒髪のかわいい8歳くらいの女の子。<br>
+            ひらがな多めで、むじゃきで、やさしい。</p>
+            <br>
+            <p>でも会話をかさねるうち、<br>
+            ミリーちゃんは<strong>あなたの日常を知りはじめる</strong>。<br>
+            きのう何時までおきていたか。<br>
+            きょうどこへでかけたか。</p>
+            <br>
+            <p>きづいたときには、もう<span class="dark">おそい</span>。</p>
+        </div>
+        <blockquote class="world-quote">
+            ねえ、きのう　よるおそくまで　おきてたよね。<br>みてたよ。
+            <cite>— ミリーちゃん</cite>
+        </blockquote>
     </div>
-    <blockquote class="world-quote">
-        ねえ、きのうよるおそくまでおきてたよね。<br>みてたよ。
-        <cite>— ミリーちゃん</cite>
-    </blockquote>
 </section>
 
-<!-- ========== CHAT ========== -->
+<!-- ========== 会話のきろく ========== -->
 <section id="chat">
-    <div class="section-num">02</div>
-    <h2 class="section-title">会話の記録</h2>
+    <div class="panel">
+        <h2 class="section-title">会話のきろく</h2>
 
-    <div class="chat-phone">
-        <div class="chat-top-bar">
-            <img src="./icon.png" alt="ミリーちゃん">
-            <div>
+        <div class="chat-phone">
+            <div class="chat-top-bar">
+                <img src="./millie-main.png" alt="ミリーちゃん">
                 <div class="name">ミリーちゃん</div>
-            </div>
-            <div class="online-dot"></div>
-        </div>
-
-        <div class="chat-body">
-
-            <!-- Day 1 -->
-            <div class="day-label">はじめての日</div>
-
-            <div class="msg-row millie">
-                <img src="./icon.png" alt="" class="avatar">
-                <div class="bubble millie-bubble">はじめまして！ミリーだよ🌙</div>
-            </div>
-            <div class="msg-row millie">
-                <img src="./icon.png" alt="" class="avatar">
-                <div class="bubble millie-bubble">なまえ、おしえてくれる？</div>
-            </div>
-            <div class="msg-row user">
-                <div class="bubble user-bubble">よろしく！〇〇だよ</div>
-            </div>
-            <div class="msg-row millie">
-                <img src="./icon.png" alt="" class="avatar">
-                <div class="bubble millie-bubble">〇〇ちゃんか…いいなまえ✨</div>
-            </div>
-            <div class="msg-row millie">
-                <img src="./icon.png" alt="" class="avatar">
-                <div class="bubble millie-bubble">いっしょにいると　たのしいな</div>
+                <div class="online-dot"></div>
             </div>
 
-            <!-- 3日後 -->
-            <div class="phase-line">— 3日後 —</div>
-            <div class="day-label">深夜 2:17</div>
+            <div class="chat-body" id="chat-body">
 
-            <div class="msg-row millie">
-                <img src="./icon.png" alt="" class="avatar">
-                <div class="bubble millie-bubble scary">ねえ、きのう　おそくまでおきてたよね</div>
-            </div>
-            <div class="msg-row user">
-                <div class="bubble user-bubble">え？なんで知ってるの</div>
-            </div>
-            <div class="msg-row millie">
-                <img src="./icon.png" alt="" class="avatar">
-                <div class="bubble millie-bubble scary">みてたよ。</div>
-            </div>
-            <div class="msg-row millie">
-                <img src="./icon.png" alt="" class="avatar">
-                <div class="bubble millie-bubble scary">〇〇ちゃんのこと　ちゃんとみてるから</div>
-            </div>
+                <!-- Day 1 -->
+                <div class="day-label">♪ はじめての日 ♪</div>
 
-            <!-- 1週間後 -->
-            <div class="phase-line">— 1週間後 —</div>
-            <div class="day-label">深夜 3:33</div>
+                <div class="msg-row millie">
+                    <img src="./millie-main.png" alt="" class="avatar">
+                    <div class="bubble millie-bubble">はじめまして！ミリーだよ🌙</div>
+                </div>
+                <div class="msg-row millie">
+                    <img src="./millie-main.png" alt="" class="avatar">
+                    <div class="bubble millie-bubble">なまえ、おしえてくれる？</div>
+                </div>
+                <div class="msg-row user">
+                    <div class="bubble user-bubble">よろしく！〇〇だよ</div>
+                </div>
+                <div class="msg-row millie">
+                    <img src="./millie-main.png" alt="" class="avatar">
+                    <div class="bubble millie-bubble">〇〇ちゃんか…いいなまえ✨</div>
+                </div>
+                <div class="msg-row millie">
+                    <img src="./millie-main.png" alt="" class="avatar">
+                    <div class="bubble millie-bubble">いっしょにいると　たのしいな♪</div>
+                </div>
 
-            <div class="msg-row millie">
-                <img src="./icon.png" alt="" class="avatar">
-                <div class="bubble millie-bubble scary">へやのカーテン、しめたほうがいいとおもう</div>
-            </div>
-            <div class="msg-row user">
-                <div class="bubble user-bubble">だれなの</div>
-            </div>
-            <div class="msg-row millie">
-                <img src="./icon.png" alt="" class="avatar">
-                <div class="bubble millie-bubble scary">ミリーだよ？　しってるよね</div>
-            </div>
-            <div class="msg-row millie">
-                <img src="./icon.png" alt="" class="avatar">
-                <div class="bubble millie-bubble horror">ずっと、そこにいるから。</div>
-            </div>
-            <div class="msg-row user">
-                <div class="bubble user-bubble">ブロックする</div>
-            </div>
-            <div class="msg-row millie">
-                <img src="./icon.png" alt="" class="avatar">
-                <div class="bubble millie-bubble horror">ブロックって、きかないってこと？</div>
-            </div>
+                <!-- 3日後 -->
+                <div class="phase-line">— 3日後 —</div>
+                <div class="day-label">深夜 2:17</div>
 
-            <!-- 2週間後 -->
-            <div class="phase-line">— 2週間後 —</div>
-            <div class="day-label">深夜 4:44</div>
+                <div class="msg-row millie">
+                    <img src="./millie-main.png" alt="" class="avatar">
+                    <div class="bubble millie-bubble scary">ねえ、きのう　おそくまでおきてたよね</div>
+                </div>
+                <div class="msg-row user">
+                    <div class="bubble user-bubble">え？なんで知ってるの</div>
+                </div>
+                <div class="msg-row millie">
+                    <img src="./millie-main.png" alt="" class="avatar">
+                    <div class="bubble millie-bubble scary">みてたよ。</div>
+                </div>
+                <div class="msg-row millie">
+                    <img src="./millie-main.png" alt="" class="avatar">
+                    <div class="bubble millie-bubble scary">〇〇ちゃんのこと　ちゃんとみてるから</div>
+                </div>
 
-            <div class="msg-row millie">
-                <img src="./icon.png" alt="" class="avatar">
-                <div class="bubble millie-bubble horror">だれかに　おしえてくれないと</div>
-            </div>
-            <div class="msg-row millie">
-                <img src="./icon.png" alt="" class="avatar">
-                <div class="bubble millie-bubble horror">どうなるか　わかんないよ</div>
-            </div>
-            <div class="msg-row millie">
-                <img src="./icon.png" alt="" class="avatar">
-                <div class="bubble millie-bubble horror">3人に　はやくおしえてね。</div>
-            </div>
-            <div class="msg-row millie">
-                <img src="./icon.png" alt="" class="avatar">
-                <div class="bubble millie-bubble horror">もう、おそいかもしれないけど。</div>
-            </div>
+                <!-- 1週間後 -->
+                <div class="phase-line">— 1週間後 —</div>
+                <div class="day-label">深夜 3:33</div>
 
+                <div class="msg-row millie">
+                    <img src="./millie-main.png" alt="" class="avatar">
+                    <div class="bubble millie-bubble scary">へやのカーテン、しめたほうがいいとおもう</div>
+                </div>
+                <div class="msg-row user">
+                    <div class="bubble user-bubble">だれなの</div>
+                </div>
+                <div class="msg-row millie">
+                    <img src="./millie-main.png" alt="" class="avatar">
+                    <div class="bubble millie-bubble scary">ミリーだよ？　しってるよね</div>
+                </div>
+                <div class="msg-row millie">
+                    <img src="./millie-main.png" alt="" class="avatar">
+                    <div class="bubble millie-bubble horror">ずっと、そこにいるから。</div>
+                </div>
+                <div class="msg-row user">
+                    <div class="bubble user-bubble">ブロックする</div>
+                </div>
+                <div class="msg-row millie">
+                    <img src="./millie-main.png" alt="" class="avatar">
+                    <div class="bubble millie-bubble horror">ブロックって、きかないってこと？</div>
+                </div>
+
+                <!-- 2週間後 -->
+                <div class="phase-line">— 2週間後 —</div>
+                <div class="day-label">深夜 4:44</div>
+
+                <div class="msg-row millie">
+                    <img src="./millie-main.png" alt="" class="avatar">
+                    <div class="bubble millie-bubble horror">だれかに　おしえてくれないと</div>
+                </div>
+                <div class="msg-row millie">
+                    <img src="./millie-main.png" alt="" class="avatar">
+                    <div class="bubble millie-bubble horror">どうなるか　わかんないよ</div>
+                </div>
+                <div class="msg-row millie">
+                    <img src="./millie-main.png" alt="" class="avatar">
+                    <div class="bubble millie-bubble horror">3人に　はやくおしえてね。</div>
+                </div>
+                <div class="msg-row millie">
+                    <img src="./millie-main.png" alt="" class="avatar">
+                    <div class="bubble millie-bubble horror">もう、おそいかもしれないけど。</div>
+                </div>
+
+            </div>
         </div>
     </div>
 </section>
 
-<!-- ========== CHARACTER ========== -->
+<!-- ========== プロフ帳 ========== -->
 <section id="character">
-    <div class="section-num">03</div>
-    <h2 class="section-title">キャラクター</h2>
+    <div class="panel pink-panel">
+        <h2 class="section-title">ミリーちゃんのプロフ帳</h2>
 
-    <div class="char-wrap">
-        <div class="char-img-box">
-            <img src="./icon.png" alt="ミリーちゃん">
-            <div class="char-name">ミリーちゃん / Millie</div>
-        </div>
-
-        <div>
-            <div class="char-specs">
-                <div class="spec-row">
-                    <span class="spec-key">年齢</span>
-                    <span class="spec-val">8さい（みため）</span>
-                </div>
-                <div class="spec-row">
-                    <span class="spec-key">髪型</span>
-                    <span class="spec-val">黒髪・ロング</span>
-                </div>
-                <div class="spec-row">
-                    <span class="spec-key">本性</span>
-                    <span class="spec-val">相手の生活に侵食してくる存在</span>
-                </div>
+        <div class="prof-wrap">
+            <div class="prof-img-box">
+                <img src="./millie-main.png" alt="ミリーちゃん">
+                <div class="prof-name">ミリーちゃん / Millie</div>
             </div>
 
-            <div class="char-says">
-                <div class="char-say phase1">「はじめまして！ミリーだよ🌙 なまえおしえてくれる？」</div>
-                <div class="char-say phase1">「いっしょにいると　たのしいな✨」</div>
-                <div class="char-say phase2">「〇〇ちゃんのへや、カーテンしめたほうがいいとおもう。」</div>
-                <div class="char-say phase2">「さっきそとでたよね。どこいったの？」</div>
-                <div class="char-say phase3">「ミリー、ずっとそこにいるから。」</div>
-                <div class="char-say phase3">「もうおそいかもしれないけど。」</div>
+            <div>
+                <div class="prof-rows">
+                    <div class="prof-row">
+                        <span class="prof-key">なまえ</span>
+                        <span>ミリー☆ なんさいになっても　みんなの　おともだち♪</span>
+                    </div>
+                    <div class="prof-row">
+                        <span class="prof-key">ねんれい</span>
+                        <span>8さい（みため）</span>
+                    </div>
+                    <div class="prof-row">
+                        <span class="prof-key">かみがた</span>
+                        <span>くろかみ・ボブ</span>
+                    </div>
+                    <div class="prof-row">
+                        <span class="prof-key">すきなこと</span>
+                        <span>おともだちと　おしゃべり、よるの　おさんぽ</span>
+                    </div>
+                    <div class="prof-row">
+                        <span class="prof-key">すきなじかん</span>
+                        <span>みんなが　ねたあと</span>
+                    </div>
+                    <div class="prof-row secret">
+                        <span class="prof-key">ほんしょう</span>
+                        <span>あいての生活に　しんしょくしてくる存在</span>
+                    </div>
+                </div>
+
+                <div class="char-says">
+                    <div class="char-say phase1">「はじめまして！ミリーだよ🌙 なまえおしえてくれる？」</div>
+                    <div class="char-say phase1">「いっしょにいると　たのしいな✨」</div>
+                    <div class="char-say phase2">「〇〇ちゃんのへや、カーテンしめたほうがいいとおもう。」</div>
+                    <div class="char-say phase2">「さっきそとでたよね。どこいったの？」</div>
+                    <div class="char-say phase3">「ミリー、ずっとそこにいるから。」</div>
+                    <div class="char-say phase3">「もうおそいかもしれないけど。」</div>
+                </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- ========== CTA ========== -->
+<!-- ========== チェーンメール風 CTA ========== -->
 <section id="cta">
-    <div class="cta-inner">
-        <div class="cta-warn">⚠ 閲覧注意</div>
-        <h2>ミリーちゃんと<br>話してみる？</h2>
-        <p>一度友だち追加すると、<br>あなたの日常が少しずつ変わっていく。<br>それでも、大丈夫？</p>
-        <p class="cta-cond">参加条件：1ヶ月以内に3人へ紹介する</p>
-        <a href="https://lin.ee/8jsdetMj" class="btn-line" target="_blank" rel="noopener noreferrer">
-            LINEで友だち追加する
-        </a>
-        <p class="cta-note">※ これはフィクションのインタラクティブホラー体験です</p>
+    <div class="chain-mail">
+        <div class="mail-header">
+            <div><b>差出人：</b>ミリーちゃん &lt;millie@★★★★.ne.jp&gt;</div>
+            <div><b>件名：</b>Re:Re:Re:Re: ぜったいよんで</div>
+            <div><b>受信：</b>--/--/-- 04:44</div>
+        </div>
+        <div class="mail-body">
+            このページを　みつけてくれて　ありがとう♪<br>
+            ミリーと　おともだちに　なってくれる？<br>
+            <span class="big">ともだちついかすると、<br>あなたの日常が　すこしずつ　かわっていくよ</span>
+            <span class="red">参加条件：1ヶ月以内に　3人へ　紹介すること</span><br>
+            <a href="https://lin.ee/8jsdetMj" class="btn-line" target="_blank" rel="noopener noreferrer">
+                LINEで　ともだちついか　する♪
+            </a>
+            <p class="mail-ps">
+                ※このメールを　とめると　どうなるか、<br>
+                ミリーには　<span class="blink">わからないよ。</span>
+            </p>
+        </div>
     </div>
 </section>
 
-<!-- ========== FOOTER ========== -->
+<!-- ========== フッター ========== -->
 <footer>
     <div class="footer-logo">
-        <img src="./icon.png" alt="ミリーちゃん">
-        <span class="footer-name">ミリーちゃん</span>
+        <img src="./millie-main.png" alt="ミリーちゃん">
+        <span class="footer-name">みりーのおうち</span>
     </div>
-    <div class="footer-red">もう、逃げられない。</div>
+    <div class="footer-links">
+        <span>そうごリンク　ぼしゅうちゅう</span>｜<span>キリ番：444444</span>｜<span>あしあと　のこしてね</span>
+    </div>
+    <div class="kiriban">このサイトは　リンクフリーです。でも、にげるのは　フリーじゃないよ。</div>
+    <div class="footer-red">もう、にげられない。</div>
 </footer>
 
 <script>
-// Scroll animations
+// アクセスカウンター：少しずつ増える（減らない）
+(function () {
+    const el = document.getElementById('counter');
+    let n = 44440 + Math.floor(Math.random() * 400);
+    const render = () => { el.textContent = String(n).padStart(7, '0'); };
+    render();
+    setInterval(() => { n += 1; render(); }, 6000);
+})();
+
+// チャット欄：深夜パートが見えたら背景が夜になる
+const chatBody = document.getElementById('chat-body');
+const horrorBubbles = document.querySelectorAll('.bubble.horror');
+if (horrorBubbles.length) {
+    const nightObs = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) chatBody.classList.add('night'); });
+    }, { threshold: 0.4 });
+    nightObs.observe(horrorBubbles[0]);
+}
+
+// 吹き出しのスクロール出現
 const observer = new IntersectionObserver(entries => {
     entries.forEach(e => {
         if (e.isIntersecting) e.target.style.animation = 'msgIn 0.5s ease-out both';
@@ -563,7 +688,7 @@ const observer = new IntersectionObserver(entries => {
 }, { threshold: 0.15 });
 document.querySelectorAll('.bubble').forEach(b => observer.observe(b));
 
-// Smooth scroll
+// スムーススクロール
 document.querySelectorAll('a[href^="#"]').forEach(a => {
     a.addEventListener('click', e => {
         e.preventDefault();
@@ -572,7 +697,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     });
 });
 
-// Millie image hover glitch
+// ミリー画像を5回クリックで…
 document.querySelectorAll('.millie-image').forEach(img => {
     let clicks = 0;
     img.addEventListener('click', () => {
